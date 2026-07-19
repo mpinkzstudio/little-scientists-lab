@@ -4,502 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧪 Little Scientist's Lab</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- import script -->
+    <script src="js/main.js"></script>
+    <script src="js/solution-chemistry/dilution.js"></script>
+    <script src="js/solution-chemistry/molarity.js"></script>
+    <script src="js/solution-chemistry/molecular-weight.js"></script>
+    <script src="js/solution-chemistry/solution-preparation.js"></script>
+    <script src="js/chemistry-analysis/titration.js"></script>
+    <script src="js/laboratory-utilities/unit-converter.js"></script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-main: #fbf2f2;      /* สีพื้นหลัง: ขาวอมชมพูนมตุ่นๆ นวลตา ถอดมาจากสีตัวเคสพาเลตต์ */
-            --primary: #9d6b70;      /* สีหลัก (ตัวหนังสือ/ปุ่ม): น้ำตาลอมชมพูโรสวูด/มันม่วงตุ่นๆ อ่านง่าย สบายตา ไม่ฉูดฉาด */
-            --primary-dark: #6e474b; /* สีเข้มเพิ่มมิติ: น้ำตาลเข้มอมชมพูหม่น สำหรับหัวข้อใหญ่ */
-            --accent: #e5b3b6;       /* สีเน้น (ขอบการ์ด): ชมพูกลีบซากุระนุ่มๆ ละมุนใจ */
-            --accent-light: #fef8f8; /* สีขาวนวลประกายชมพูอ่อนมากๆ สำหรับเอฟเฟกต์ Hover */
-            --text-muted: #c9a7ac;   /* สีชมพูเบจตุ่น: สำหรับคำอธิบายซับเท็กซ์ */        
-        }
-
-        body {
-            font-family: 'Quicksand', 'Fredoka', sans-serif;
-            background-color: var(--bg-main);
-            margin: 0;
-            padding: 0;
-            color: var(--primary);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- SIDEBAR CONTAINER --- */
-        .sidebar {
-            width: 340px;
-            background: white;
-            border-right: 3px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            padding: 30px 15px;
-            box-sizing: border-box;
-            box-shadow: 8px 0 30px rgba(96, 108, 56, 0.05);
-            z-index: 10;
-        }
-
-        .brand-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand-title {
-            font-family: 'Fredoka', sans-serif;
-            color: var(--primary-dark);
-            font-size: 24px;
-            margin: 0 0 6px 0;
-        }
-
-        .brand-subtitle {
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* --- HOME NAVIGATION BUTTON --- */
-        .home-btn {
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 16px;
-            padding: 12px 16px;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            transition: all 0.25s ease;
-            box-shadow: 0 3px 0px #e9ecef;
-        }
-
-        .home-btn:hover {
-            background-color: white;
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 0px var(--accent);
-        }
-
-        .home-btn.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary-dark);
-            box-shadow: 0 4px 0px var(--primary-dark);
-        }
-
-        .free-tools-badge {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 14px;
-            color: var(--accent);
-            text-align: left;
-            padding-left: 10px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        /* --- CATEGORY GROUP --- */
-        .menu-category {
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 20px;
-            padding: 12px 14px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 3px 0px #e9ecef;
-        }
-
-        .category-header {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            display: flex;
-            align-items: center;
-            padding: 4px 6px;
-        }
-
-        /* โซนซ่อนเมนูย่อยข้างใน */
-        .sub-menu-list {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* --- HOVER EFFECT: ชี้ที่หมวดใหญ่แล้วคลี่เมนูย่อยลงมา --- */
-        .menu-category:hover {
-            background-color: white;
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 0px var(--accent);
-        }
-
-        .menu-category:hover .sub-menu-list {
-            max-height: 300px; /* ขยายให้เห็นเมนูย่อย */
-            opacity: 1;
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1.5px dashed #f1f3f5;
-        }
-
-        /* --- SUB MENU ITEMS --- */
-        .sub-menu-item {
-            padding: 6px 8px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.2s;
-        }
-
-        .sub-menu-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #495057;
-        }
-
-        .sub-menu-desc {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-            padding-left: 14px;
-            transition: all 0.25s ease;
-        }
-
-        /* Hover ย่อยลงไปอีกระดับที่ตัวเมนูในกิ่ง */
-        .sub-menu-item:hover {
-            background-color: var(--accent-light);
-        }
-
-        .sub-menu-item:hover .sub-menu-title {
-            color: var(--primary);
-        }
-
-        .sub-menu-item:hover .sub-menu-desc {
-            max-height: 20px;
-            opacity: 1;
-            margin-top: 2px;
-        }
-
-        /* สไตล์ปุ่มย่อยตอนถูกกดเลือก (Active) */
-        .sub-menu-item.active {
-            background-color: var(--primary);
-        }
-        .sub-menu-item.active .sub-menu-title {
-            color: white;
-        }
-        .sub-menu-item.active .sub-menu-desc {
-            color: #e8f5e9;
-        }
-
-        /* --- WORKSPACE (ฝั่งขวา) --- */
-        .workspace {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow-y: auto;
-            box-sizing: border-box;
-        }
-
-        .tab-content {
-            display: none;
-            width: 100%;
-            max-width: 440px;
-            margin: auto 0;
-            animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* ปรับแต่งความกว้างพิเศษเฉพาะหน้า Home Dashboard */
-        .tab-content#home-tab {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-bottom: 40px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .card {
-            background: white;
-            padding: 35px 30px;
-            border-radius: 24px;
-            box-shadow: 0 12px 30px rgba(96, 108, 56, 0.06);
-            border: 3px solid var(--accent);
-        }
-
-        /* --- HOME DASHBOARD STYLES --- */
-        .home-hero {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-
-        .home-hero h2 {
-            font-family: 'Fredoka', sans-serif;
-            color: var(--primary-dark);
-            font-size: 38px;
-            margin: 0 0 10px 0;
-        }
-
-        .home-hero .subtitle {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 0 0 20px 0;
-        }
-
-        .home-hero .intro-text {
-            font-size: 15px;
-            color: #495057;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .section-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 22px;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-            padding-left: 5px;
-            border-left: 5px solid var(--accent);
-            line-height: 1.2;
-        }
-
-        /* การ์ดเครื่องมือ (Tools Grid) */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .tool-card {
-            background: white;
-            border: 2.5px solid #e9ecef;
-            border-radius: 20px;
-            padding: 22px 20px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 0px #e9ecef;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .tool-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 0px var(--accent);
-            background-color: var(--accent-light);
-        }
-
-        .tool-card-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        .tool-card-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        /* โซนข้อมูลด้านล่าง (Overview & Premium) */
-        .info-panels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .info-card {
-            background: #f8f9fa;
-            border: 2px dashed var(--text-muted);
-            border-radius: 20px;
-            padding: 25px;
-        }
-
-        .info-card.premium {
-            border-color: var(--accent);
-            background-color: #fffaf0;
-        }
-
-        .info-list {
-            margin: 0;
-            padding-left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            color: #495057;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .info-list li strong {
-            color: var(--primary-dark);
-        }
-
-        /* --- CALCULATOR CARD STYLES --- */
-        .card h3 {
-            font-family: 'Fredoka', sans-serif;
-            color: var(--primary-dark);
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 22px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 14px;
-            padding-left: 4px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2.5px solid #e9ecef;
-            border-radius: 16px;
-            font-size: 16px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            box-sizing: border-box;
-            transition: all 0.25s ease;
-            background-color: #f8f9fa;
-            color: var(--primary-dark);
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(221, 161, 94, 0.15);
-            outline: none;
-        }
-
-        .calc-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 16px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 0px var(--primary-dark);
-        }
-
-        .calc-btn:hover {
-            background-color: #4f5d2f;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px var(--primary-dark);
-        }
-
-        .calc-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0px var(--primary-dark);
-        }
-
-        .result-box {
-            margin-top: 28px;
-            padding: 20px;
-            background-color: var(--accent-light);
-            border: 2.5px dashed var(--text-muted);
-            border-radius: 18px;
-            display: none;
-            text-align: center;
-        }
-
-        .result-box label {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .result-value {
-            font-size: 32px;
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .unit {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-
-        .error-box {
-            margin-top: 28px;
-            padding: 16px;
-            background-color: #ffe5ec;
-            border-radius: 16px;
-            color: #fb6f92;
-            font-size: 14px;
-            font-weight: 700;
-            display: none;
-            border: 2px solid #ffc2d1;
-            text-align: center;
-        }
-
-        .welcome-card {
-            text-align: center;
-        }
-        .welcome-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.95); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* ปรับสไตล์ Responsive เล็กน้อยสำหรับหน้าบอร์ด */
-        @media (max-width: 800px) {
-            .info-panels {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
+
 <body>
 
     <!-- --- SIDEBAR (ฝั่งซ้าย) --- -->
@@ -645,7 +166,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- แท็บ 1: Dilution Calculator -->
         <div id="dilution-tab" class="tab-content">
@@ -944,121 +464,170 @@
         </div>
 
 
-        <!-- แท็บ 5: Strong Acid-Base Titration (เวอร์ชันหัวข้ออยู่กับที่ สลับเฉพาะชื่อสาร) -->
-        <div id="titration-tab" class="tab-content">
-            
-            <!-- CSS พิเศษปลดล็อก Container ชั้นนอกสุด ให้ยอมขยายกว้างขวาง -->
-            <style>
-                #titration-tab, 
-                #titration-tab-container, 
-                .content-area,
-                #titration-tab .card {
-                    width: 100% !important;
-                    max-width: 900px !important;
-                    box-sizing: border-box !important;
-                }
-            </style>
+        <!-- แท็บ 5: Strong Acid-Base Titration -->
+        <div id="titration-tab" class="tab-content" style="max-width:900px !important">
+            <div class="card" style="max-width: 900px !important; margin: 0 auto;">
+                <h3>Strong Acid-Base Titration</h3>
+                <p style="text-align:center; font-size:14px; color:#6c757d; font-family: 'Quicksand', sans-serif; margin-top:-10px;">Reaction Ratio: 1:1</p>
 
-            <div class="card" style="margin: 0 auto; font-family: 'Quicksand', sans-serif; box-sizing: border-box;">
-                <h3 style="text-align: center; margin-bottom: 25px;">Strong Acid-Base Titration</h3>
+                <hr style="border:1px dashed var(--accent); margin:20px 0;">
 
-                <!-- Main Grid Container: แบ่งซ้าย-ขวา -->
-                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start;">
-                    
-                    <!-- ================= ⬅️ ฝั่งซ้าย (Controls & Slider ตัว Drag อยู่ล่างซ้าย) ================= -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        
-                        <!-- 1. Direction Toggle (หัวข้ออยู่กับที่ สลับเฉพาะชื่อสารด้านล่าง) -->
-                        <div style="background: #f8f9fa; padding: 12px; border-radius: 16px; border: 2.5px solid #e9ecef; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                            <!-- ฝั่งซ้าย ล็อกหัวข้อเป็น Analyte เสมอ -->
-                            <div style="font-size: 12px; font-weight: 700; color: var(--primary); text-align: left;">
-                                <span>Analyte (In Flask):</span>
-                                <div style="font-size: 14px; color: var(--primary-dark);" id="lblAnalyte">HCl (Acid)</div>
-                            </div>
-                            
-                            <button type="button" onclick="swapTitrationDirection()" style="background: #fff; border: 2.5px solid #e9ecef; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='#e9ecef'">🔁</button>
-                            
-                            <!-- ฝั่งขวา ล็อกหัวข้อเป็น Titrant เสมอ -->
-                            <div style="font-size: 12px; font-weight: 700; color: var(--accent); text-align: right;">
-                                <span>Titrant (In Burette):</span>
-                                <div style="font-size: 14px; color: var(--primary-dark);" id="lblTitrant">NaOH (Base)</div>
+                <div class="titration-grid">
+                    <!-- ================= LEFT SIDE ================= -->
+                    <div>
+                        <h4 style="font-family:'Fredoka',sans-serif; color:var(--primary-dark);">Titration Data</h4>
+
+                        <!-- Select Analyte -->
+                        <div class="input-group">
+                            <label>Select Analyte</label>
+                            <select id="analyteSelect" onchange="updateAcidData()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                                <option value="">Choose Strong Acid</option>
+                                <option value="HCl">Hydrochloric Acid (HCl)</option>
+                                <option value="HNO3">Nitric Acid (HNO₃)</option>
+                                <option value="HBr">Hydrobromic Acid (HBr)</option>
+                                <option value="HI">Hydroiodic Acid (HI)</option>
+                                <option value="HClO4">Perchloric Acid (HClO₄)</option>
+                            </select>
+                        </div>
+
+                        <!-- C1 -->
+                        <div class="input-group">
+                            <label>Titrant Concentration (C₁)</label>
+                            <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
+                                <input type="number" id="titrantConc" placeholder="e.g., 0.1" step="any">
+                                <select id="titrantConcUnit">
+                                    <option value="M">M</option>
+                                    <option value="mM">mM</option>
+                                </select>
                             </div>
                         </div>
 
-                        <!-- 2. Input Parameters Box -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <!-- Flask Side (ฝั่งซ้ายเป็นค่าใน Flask เสมอ ป้ายกำกับเปลี่ยนตามทิศทาง) -->
-                            <div style="background: rgba(var(--primary-rgb || 0,0,0), 0.01); padding: 12px; border-radius: 16px; border: 2px dashed #e9ecef;">
-                                <div style="font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 8px;">Flask Contents</div>
-                                <div class="input-group" style="margin-bottom: 8px;">
-                                    <label style="font-size: 11px;" id="lblConc1">Concentration (C₁)</label>
-                                    <input type="number" id="titConc1" value="0.1" step="any" oninput="runTitrationSim()" style="width: 100%; padding: 8px 10px; border: 2px solid #e9ecef; border-radius: 12px; font-weight: 700; box-sizing: border-box;">
-                                </div>
-                                <div class="input-group">
-                                    <label style="font-size: 11px;" id="lblVol1">Volume (V₁) [mL]</label>
-                                    <input type="number" id="titVol1" value="50" step="any" oninput="runTitrationSim()" style="width: 100%; padding: 8px 10px; border: 2px solid #e9ecef; border-radius: 12px; font-weight: 700; box-sizing: border-box;">
-                                </div>
+                        <!-- V1 -->
+                        <div class="input-group">
+                            <label>Titrant Volume Used (V₁)</label>
+                            <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
+                                <input type="number" id="titrantVol" placeholder="e.g., 25" step="any">
+                                <select id="titrantVolUnit">
+                                    <option value="mL">mL</option>
+                                    <option value="L">L</option>
+                                </select>
                             </div>
+                        </div>
 
-                            <!-- Burette Side (ฝั่งขวาเป็นค่าใน Burette เสมอ) -->
-                            <div style="background: rgba(var(--accent-rgb || 0,0,0), 0.01); padding: 12px; border-radius: 16px; border: 2px dashed #e9ecef;">
-                                <div style="font-weight: 700; font-size: 13px; color: var(--accent); margin-bottom: 8px;">Burette Contents</div>
-                                <div class="input-group" style="margin-bottom: 8px;">
-                                    <label style="font-size: 11px;" id="lblConc2">Concentration (C₂)</label>
-                                    <input type="number" id="titConc2" value="0.1" step="any" oninput="runTitrationSim()" style="width: 100%; padding: 8px 10px; border: 2px solid #e9ecef; border-radius: 12px; font-weight: 700; box-sizing: border-box;">
-                                </div>
-                                <div class="input-group">
-                                    <label style="font-size: 11px;">Added Volume</label>
-                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                        <input type="number" id="titVolAdded" value="0" step="any" oninput="syncTitSliderFromInput()" style="width: 100%; padding: 8px 6px; border: 2px solid #e9ecef; border-radius: 12px; font-weight: 700; box-sizing: border-box; text-align: center;">
-                                        <span style="font-size: 11px; color: #6c757d;">mL</span>
+                        <!-- V2 -->
+                        <div class="input-group">
+                            <label>Sample Volume (V₂)</label>
+                            <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
+                                <input type="number" id="sampleVol" placeholder="e.g., 10" step="any">
+                                <select id="sampleVolUnit">
+                                    <option value="mL">mL</option>
+                                    <option value="L">L</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button id="calculateTitrationBtn" class="calc-btn" onclick="calculateTitration()">Calculate ✨</button>
+
+                        <!-- Titration Result -->
+                        <div id="titrationResultBox" class="result-box" style="text-align:left; padding:20px;">
+                            <div style="font-weight:700; color:var(--primary-dark); margin-bottom:8px;">📝 Formula: C₁V₁ = C₂V₂</div>
+                            <div id="titrationSteps" style="font-size:13px; color:#495057; line-height:1.6;"></div>
+                            <div style="font-size:14px; font-weight:700; color:var(--primary); margin-top:12px;">Sample Concentration (C₂)</div>
+                            <div id="sampleConcResult" class="result-value" style="font-size:28px; text-align:center;">0.000</div>
+                            <span class="unit">mol/L</span>
+                        </div>
+                    </div>
+
+                    <!-- ================= RIGHT SIDE ================= -->
+                    <div>
+                        <h4 style="font-family:'Fredoka',sans-serif; color:var(--primary-dark);">Sample Analysis</h4>
+                        
+                        <!-- Calculation Type -->
+                        <div class="input-group">
+                            <label>Calculation Type</label>
+                            <div style="display:flex; gap:25px; align-items:center;">
+                                <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="percentType" value="ww" onchange="updateSampleInput()">%(w/w)</label>
+                                <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="percentType" value="wv" onchange="updateSampleInput()">%(w/v)</label>
+                            </div>
+                        </div>
+
+                        <!-- Sample Amount -->
+                        <div class="input-group">
+                            <label id="sampleAmountLabel">Sample Weight</label>
+                            <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
+                                <input type="number" id="sampleAmount" placeholder="Select calculation type first" disabled>
+                                <span id="sampleAmountUnit" style="padding:12px 0; text-align:center;">
+                                </span>
+                            </div>
+                        </div>
+                        <hr style="border:1px dashed var(--accent); margin:20px 0;">
+
+                        <!-- Dilution -->
+                        <h4 style="font-family:'Fredoka',sans-serif; color:var(--primary-dark);">Dilution Details</h4>
+                        <div id="dilutionContainer">
+
+                            <!-- Step 1 -->
+                            <div class="dilution-step" style="background:#f8f9fa; border-radius:16px; padding:15px;">
+                                <b style="font-size:13px; display:block; margin-bottom:12px;">Dilution Step 1</b>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+                                    <!-- Sample Weight -->
+                                    <div class="input-group" style="margin-bottom:0;">
+                                        <label id="step1Label">Sample Weight</label>
+                                        <div style="display:grid; grid-template-columns:1fr 70px; gap:10px;">
+                                            <input type="number" id="step1Amount" class="dilutionInput" data-type="weight" readonly>
+                                            <span id="step1Unit" style="padding:12px 0; text-align:center;">
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Final Volume -->
+                                    <div class="input-group" style="margin-bottom:0;">
+                                        <label>Total Volume</label>
+                                        <div style="display:grid; grid-template-columns:1fr 70px; gap:10px;">
+                                            <input type="number" id="step1FinalVolume" class="dilutionInput" data-type="finalVolume" placeholder="Volume">
+                                            <span style="padding:12px 0; text-align:center;">mL</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 3. Interactive Slider (ตัว Drag อยู่ด้านล่างซ้าย) -->
-                        <div class="input-group" style="background: #fff; padding-top: 10px;">
-                            <label style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; font-weight: 700;">
-                                <span>Drag to simulate adding titrant</span>
-                                <span id="sliderMaxLabel" style="color: #6c757d; font-size: 11px; font-weight: normal;">Max: 100 mL</span>
-                            </label>
-                            <input type="range" id="titSlider" min="0" max="100" value="0" step="0.1" oninput="syncTitInputFromSlider()" style="width: 100%; accent-color: var(--primary); cursor: pointer;">
-                        </div>
+                        <!-- Add Dilution Button -->
+                        <button id="addDilutionBtn" class="calc-btn" onclick="addDilutionStep()"
+                        style="background:#fff; color:var(--primary); border:2px dashed var(--primary); margin-top:15px;">+ Add Dilution</button>
 
-                    </div>
-
-                    <!-- ================= ➡️ ฝั่งขวา (Summary Text อยู่บน + กราฟอยู่ล่าง) ================= -->
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        
-                        <!-- กล่องสรุป pH ผลลัพธ์และตัวบ่งชี้สี -->
-                        <div id="titSummaryBox" style="background: #f8f9fa; border-radius: 16px; padding: 14px; border: 2.5px solid #e9ecef; display: grid; grid-template-columns: 75px 1fr; gap: 15px; align-items: center;">
-                            <div style="text-align: center;">
-                                <div id="flaskColorIndicator" style="width: 44px; height: 44px; margin: 0 auto; border: 4px solid #495057; border-top: none; border-radius: 0 0 14px 14px; background: #fff; transition: background 0.3s; position: relative; box-sizing: border-box;">
-                                    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 75%; background: rgba(0,0,0,0.05); border-radius: 0 0 10px 10px; transition: background 0.3s;" id="liquidColor"></div>
-                                </div>
-                                <div style="font-size: 9px; font-weight: 700; margin-top: 5px; color: #6c757d;" id="indicatorName">Phenolphthalein</div>
-                            </div>
-                            <div style="text-align: left; font-size: 13px; line-height: 1.5; color: #495057;">
-                                <div>🌟 <b>Equivalence Point:</b> Reached at <span id="txtEquivVol" style="color: var(--primary); font-weight: 700;">50.00</span> mL</div>
-                                <div>🩷 <b>Current Status:</b> At <span id="txtCurrentAdded" style="font-weight:700;">0</span> mL, <span id="txtCurrentPH" style="font-weight: 700; font-size: 16px; color: var(--accent);">pH = 1.00</span></div>
-                                <div id="txtChemicalState" style="font-size: 11px; color: #6c757d; margin-top: 2px;">Excess acid in flask</div>
+                        <!-- Molecular Weight -->
+                        <div class="input-group" style="margin-top:20px;">
+                            <label>Molecular Weight (Auto)</label>
+                            <div style="display:grid; grid-template-columns:1fr 100px; gap:10px;">
+                                <input type="number" id="molecularWeight" placeholder="Select acid first" readonly>
+                                <span style="padding:12px; ">g/mol</span>
                             </div>
                         </div>
 
-                        <!-- Titration Curve Chart Canvas -->
-                        <div style="background: #ffffff; border: 2.5px solid #e9ecef; border-radius: 16px; padding: 16px 12px 12px 12px; position: relative;">
-                            <div style="position: absolute; left: 15px; top: 12px; font-size: 11px; font-weight: 700; color: #adb5bd;">pH</div>
-                            <div style="position: absolute; right: 15px; bottom: 14px; font-size: 11px; font-weight: 700; color: #adb5bd;">Volume (mL)</div>
-                            <canvas id="titrationCanvas" width="480" height="260" style="width: 100%; height: auto; display: block;"></canvas>
+                        <button id="calculateAnalysisBtn" class="calc-btn" onclick="calculateAnalysis()">Calculate ✨</button>
+
+                        <!-- Analysis Result -->
+                        <div id="analysisResultBox" class="result-box" style="text-align:left; padding:20px;">
+                            <div style="font-size:14px; font-weight:700; color:var(--primary);">
+                                Result:
+                            </div>
+                            <p>Analyte Amount:</p>
+                            <div id="analyteAmountResult" class="result-value">
+                                0.000 g
+                            </div>
+                            <p>Composition:</p>
+                            <div id="compositionResult" class="result-value">
+                                0.000 %
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
-
 
         <!-- แท็บ 6: Scientific Unit Converter -->
         <div id="converter-tab" class="tab-content">
@@ -1124,958 +693,8 @@
         </div>
 
     </div>
-
-<script>
-// --- ระบบจัดการเปลี่ยนแท็บหน้าจอ ---
-function switchTab(tabId, element, isHome = false) {
-    // 1. ซ่อนเนื้อหาฝั่งขวาทุกตัว
-    const contents = document.querySelectorAll('.tab-content');
-    contents.forEach(content => content.classList.remove('active'));
-    
-    // 2. เอาสถานะ active ออกจากเมนูย่อยและปุ่มโฮมทั้งหมด
-    document.getElementById('home-nav-btn').classList.remove('active');
-    const subMenuItems = document.querySelectorAll('.sub-menu-item');
-    subMenuItems.forEach(item => item.classList.remove('active'));
-    
-    // 3. เปิดแสดงผลหน้าต่างที่เราเลือก
-    document.getElementById(tabId).classList.add('active');
-    
-    // 4. ตั้งค่าปุ่มควบคุมที่คลิกให้เป็น active
-    element.classList.add('active');
-}
-
-// --- ฟังก์ชันสำหรับการลิงก์จากหน้า Dashboard การ์ดไปยังเครื่องมือต่าง ๆ ---
-function navigateToTool(tabId, navId) {
-    const navElement = document.getElementById(navId);
-    if (navElement) {
-        switchTab(tabId, navElement);
-    }
-}
-
-// --- ฟังก์ชันคำนวณ Molecular Weight ---
-const atomicMasses = {
-    'H': 1.008, 'He': 4.0026, 'Li': 6.94, 'Be': 9.0122, 'B': 10.81,
-    'C': 12.0107, 'N': 14.0067, 'O': 15.999, 'F': 18.998, 'Ne': 20.180,
-    'Na': 22.990, 'Mg': 24.305, 'Al': 26.9815, 'Si': 28.0855, 'P': 30.974,
-    'S': 32.065, 'Cl': 35.45, 'Ar': 39.948, 'K': 39.098, 'Ca': 40.078,
-    'Cr': 51.996, 'Mn': 54.938, 'Fe': 55.845, 'Co': 58.933, 'Ni': 58.693,
-    'Cu': 63.546, 'Zn': 65.38, 'Ag': 107.87, 'I': 126.90, 'Ba': 137.33,
-    'Pt': 195.08, 'Au': 196.96657, 'Hg': 200.59, 'Pb': 207.2
-};
-
-function calculateWeight() {
-    const formula = document.getElementById('formulaInput').value.trim();
-    const resultBox = document.getElementById('resultBox');
-    const errorBox = document.getElementById('errorBox');
-    const resultValue = document.getElementById('resultValue');
-    
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
-    
-    if (!formula) {
-        showError('Phew! Please enter a formula first ✨');
-        return;
-    }
-
-    try {
-        let stack = [{}];
-        let i = 0;
-
-        while (i < formula.length) {
-            let ch = formula[i];
-
-            if (ch === '(' || ch === '[' || ch === '{') {
-                stack.push({});
-                i++;
-            }
-            else if (ch === ')' || ch === ']' || ch === '}') {
-                i++;
-                let start = i;
-                while (i < formula.length && /\d/.test(formula[i])) {
-                    i++;
-                }
-                let count = start < i ? parseInt(formula.substring(start, i)) : 1;
-
-                let popped = stack.pop();
-                if (!popped || stack.length === 0) {
-                    throw new Error("Mismatched parentheses 🥺");
-                }
-
-                let currentLayer = stack[stack.length - 1];
-                for (let elem in popped) {
-                    currentLayer[elem] = (currentLayer[elem] || 0) + popped[elem] * count;
-                }
-            }
-            else if (/[A-Z]/.test(ch)) {
-                let start = i;
-                i++;
-                while (i < formula.length && /[a-z]/.test(formula[i])) {
-                    i++;
-                }
-                let element = formula.substring(start, i);
-
-                if (!atomicMasses[element]) {
-                    throw new Error(`Element "${element}" is not supported yet 🥺`);
-                }
-
-                let numStart = i;
-                while (i < formula.length && /\d/.test(formula[i])) {
-                    i++;
-                }
-                let count = numStart < i ? parseInt(formula.substring(numStart, i)) : 1;
-
-                let currentLayer = stack[stack.length - 1];
-                currentLayer[element] = (currentLayer[element] || 0) + count;
-            }
-            else {
-                throw new Error("Invalid character in formula 💡");
-            }
-        }
-
-        if (stack.length !== 1) {
-            throw new Error("Mismatched parentheses 🥺");
-        }
-
-        let finalCounts = stack[0];
-        let totalWeight = 0;
-        let hasElements = false;
-
-        for (let elem in finalCounts) {
-            hasElements = true;
-            totalWeight += atomicMasses[elem] * finalCounts[elem];
-        }
-
-        if (!hasElements) {
-            throw new Error("Check your casing! (e.g., H2O works, h2o does not) 💡");
-        }
-
-        resultValue.innerText = totalWeight.toFixed(3);
-        resultBox.style.display = 'block';
-
-    } catch (error) {
-        showError(error.message);
-    }
-
-}
-
-function showError(message) {
-    const errorBox = document.getElementById('errorBox');
-    errorBox.innerText = message;
-    errorBox.style.display = 'block';
-}
-
-// --- ฟังก์ชันเปิด/ปิดฟิลด์กรอกข้อมูลตามตัวแปรที่ต้องการหาค่า ---
-function toggleDilutionInputs() {
-    const target = document.getElementById('dilutionTarget').value;
-    const inputs = ['C1', 'V1', 'C2', 'V2'];
-    
-    inputs.forEach(id => {
-        const inputEl = document.getElementById(`input-${id}`);
-        const groupEl = document.getElementById(`group-${id}`);
-        const labelEl = groupEl.querySelector('label');
-        
-        if (id === target) {
-            // ฟิลด์ที่เป็นเป้าหมาย: ปิดการกรอกเงิน และไฮไลต์ว่าเป็นค่าที่จะค้นหา
-            inputEl.disabled = true;
-            inputEl.value = '';
-            inputEl.placeholder = "🔍 Calculating...";
-            inputEl.style.backgroundColor = '#fff0f3'; // สีพื้นหลังโทนชมพูหวานๆ ให้รู้ว่าตรงนี้คือผลลัพธ์
-            labelEl.innerHTML = `<strong>${labelEl.innerText.replace('✨ (Target)', '')} ✨ (Target)</strong>`;
-        } else {
-            // ฟิลด์อื่นๆ: เปิดให้กรอกปกติ
-            inputEl.disabled = false;
-            inputEl.placeholder = "e.g., " + (id.startsWith('M') ? "1.0" : "50");
-            inputEl.style.backgroundColor = '';
-            labelEl.innerHTML = labelEl.innerText.replace('✨ (Target)', '');
-        }
-    });
-}
-
-// เรียกทำงานหนึ่งครั้งเพื่อให้ฟิลด์ V1 ถูกปิดเป็นค่าเริ่มต้นตอนโหลดหน้าเว็บ
-document.addEventListener("DOMContentLoaded", () => {
-    // ผูกระบบนี้ไว้เผื่อต้องการสลับหน้า
-    setTimeout(toggleDilutionInputs, 100);
-});
-
-// --- ฟังก์ชันคำนวณ Dilution C1V1 = C2V2 (เวอร์ชันปรับปรุงการแสดงผลวิธีคิด) ---
-function calculateDilution() {
-    const target = document.getElementById('dilutionTarget').value;
-    const resultBox = document.getElementById('dilutionResultBox');
-    const errorBox = document.getElementById('dilutionErrorBox');
-    const stepsDiv = document.getElementById('dilutionSteps');
-    const resultValueSpan = document.getElementById('dilutionResultValue');
-    
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
-
-    // ดึงค่าและหน่วยแปลงเข้าสู่หน่วยฐาน (M และ L)
-    const C1_raw = parseFloat(document.getElementById('input-C1').value);
-    const unitC1 = parseFloat(document.getElementById('unit-C1').value);
-    const V1_raw = parseFloat(document.getElementById('input-V1').value);
-    const unitV1 = parseFloat(document.getElementById('unit-V1').value);
-    const C2_raw = parseFloat(document.getElementById('input-C2').value);
-    const unitC2 = parseFloat(document.getElementById('unit-C2').value);
-    const V2_raw = parseFloat(document.getElementById('input-V2').value);
-    const unitV2 = parseFloat(document.getElementById('unit-V2').value);
-
-    // ตรวจสอบค่าว่าง (ยกเว้นตัวแปรที่เป็น Target)
-    if (target !== 'C1' && isNaN(C1_raw)) return showDilutionError("Please enter Initial Concentration (C1) 💕");
-    if (target !== 'V1' && isNaN(V1_raw)) return showDilutionError("Please enter Initial Volume (V1) 💕");
-    if (target !== 'C2' && isNaN(C2_raw)) return showDilutionError("Please enter Final Concentration (C2) 💕");
-    if (target !== 'V2' && isNaN(V2_raw)) return showDilutionError("Please enter Final Volume (V2) 💕");
-
-    // แปลงค่าที่กรอกให้เป็นค่าในหน่วยมาตรฐานสากล (M และ L) เพื่อคำนวณความถูกต้อง
-    let C1 = C1_raw * unitC1;
-    let V1 = V1_raw * unitV1;
-    let C2 = C2_raw * unitC2;
-    let V2 = V2_raw * unitV2;
-
-    let finalResult = 0;
-    let stepsHtml = "";
-    
-    // ดึงข้อความชื่อหน่วยที่ผู้ใช้เลือกผลลัพธ์ปลายทางไว้
-    const selectUnitC1 = document.getElementById('unit-C1').options[document.getElementById('unit-C1').selectedIndex].text;
-    const selectUnitV1 = document.getElementById('unit-V1').options[document.getElementById('unit-V1').selectedIndex].text;
-    const selectUnitC2 = document.getElementById('unit-C2').options[document.getElementById('unit-C2').selectedIndex].text;
-    const selectUnitV2 = document.getElementById('unit-V2').options[document.getElementById('unit-V2').selectedIndex].text;
-
-    // ฟังก์ชันช่วยจัดรูปแบบตัวเลขให้อ่านง่าย ไม่ติด e-1 ถ้าเป็นทศนิยมปกติ
-    const formatStepNum = (num) => {
-        if (num >= 0.0001 && num <= 10000) {
-            return num.toLocaleString(undefined, { maximumFractionDigits: 6 });
-        }
-        return num.toExponential(3);
-    };
-
-    if (target === 'V1') {
-        V1 = (C2 * V2) / C1;
-        finalResult = V1 / unitV1;
-        stepsHtml = `
-            <strong>Step 1:</strong> Rearrange formula<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; V1 = (C2 &times; V2) / C1<br><br>
-            <strong>Step 2:</strong> Substitute values (in base units)<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; V1 = (${formatStepNum(C2)} M &times; ${formatStepNum(V2)} L) / ${formatStepNum(C1)} M<br><br>
-            <strong>Step 3:</strong> Convert answer back to ${selectUnitV1}
-        `;
-        resultValueSpan.innerHTML = `${finalResult.toFixed(4)} <span class="unit">${selectUnitV1}</span>`;
-    } 
-    else if (target === 'C1') {
-        C1 = (C2 * V2) / V1;
-        finalResult = C1 / unitC1;
-        stepsHtml = `
-            <strong>Step 1:</strong> Rearrange formula<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; C1 = (C2 &times; V2) / V1<br><br>
-            <strong>Step 2:</strong> Substitute values (in base units)<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; C1 = (${formatStepNum(C2)} M &times; ${formatStepNum(V2)} L) / ${formatStepNum(V1)} L<br><br>
-            <strong>Step 3:</strong> Convert answer back to ${selectUnitC1}
-        `;
-        resultValueSpan.innerHTML = `${finalResult.toFixed(4)} <span class="unit">${selectUnitC1}</span>`;
-    } 
-    else if (target === 'V2') {
-        V2 = (C1 * V1) / C2;
-        finalResult = V2 / unitV2;
-        stepsHtml = `
-            <strong>Step 1:</strong> Rearrange formula<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; V2 = (C1 &times; V1) / C2<br><br>
-            <strong>Step 2:</strong> Substitute values (in base units)<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; V2 = (${formatStepNum(C1)} M &times; ${formatStepNum(V1)} L) / ${formatStepNum(C2)} M<br><br>
-            <strong>Step 3:</strong> Convert answer back to ${selectUnitV2}
-        `;
-        resultValueSpan.innerHTML = `${finalResult.toFixed(4)} <span class="unit">${selectUnitV2}</span>`;
-    } 
-    else if (target === 'C2') {
-        C2 = (C1 * V1) / V2;
-        finalResult = C2 / unitC2;
-        stepsHtml = `
-            <strong>Step 1:</strong> Rearrange formula<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; C2 = (C1 &times; V1) / V2<br><br>
-            <strong>Step 2:</strong> Substitute values (in base units)<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&bull; C2 = (${formatStepNum(C1)} M &times; ${formatStepNum(V1)} L) / ${formatStepNum(V2)} L<br><br>
-            <strong>Step 3:</strong> Convert answer back to ${selectUnitC2}
-        `;
-        resultValueSpan.innerHTML = `${finalResult.toFixed(4)} <span class="unit">${selectUnitC2}</span>`;
-    }
-
-    if (!isFinite(finalResult) || isNaN(finalResult) || finalResult < 0) {
-        return showDilutionError("Calculated value is invalid. Please check your inputs! 🥺");
-    }
-
-    stepsDiv.innerHTML = stepsHtml;
-    resultBox.style.display = 'block';
-}
-
-function showDilutionError(message) {
-    const errorBox = document.getElementById('dilutionErrorBox');
-    errorBox.innerText = message;
-    errorBox.style.display = 'block';
-}
-
-
-// --- ฟังก์ชันควบคุมการซ่อน/แสดงช่องตามเป้าหมายคำนวณ (เรียกตอนโหลดหน้าเว็บด้วยได้ถ้าต้องการ) ---
-function toggleMolarityInputs() {
-    const target = document.getElementById('molarityTarget').value;
-    
-    // รีเซ็ตการแสดงผลทุกกลุ่มก่อน
-    document.getElementById('group-mol-conc').style.display = 'grid';
-    document.getElementById('group-mol-mass').style.display = 'grid';
-    document.getElementById('group-mol-vol').style.display = 'grid';
-    
-    // ซ่อนฟิลด์ที่เป็นตัวแปรเป้าหมายที่เราอยากหา
-    if (target === 'M') {
-        document.getElementById('group-mol-conc').style.display = 'none';
-    } else if (target === 'mass') {
-        document.getElementById('group-mol-mass').style.display = 'none';
-    } else if (target === 'vol') {
-        document.getElementById('group-mol-vol').style.display = 'none';
-    }
-    
-    // เคลียร์กล่องคำตอบเก่า
-    document.getElementById('molarityResultBox').style.display = 'none';
-    document.getElementById('molarityErrorBox').style.display = 'none';
-}
-
-// เรียกให้เปิดฟังก์ชันสลับช่องครั้งแรกเพื่อให้ซ่อนช่องหา M ไว้ตามดีฟอลต์
-setTimeout(toggleMolarityInputs, 100);
-
-// --- ฟังก์ชันสำหรับการคำนวณ Molarity แบบครอบคลุมย้อนกลับทุกมิติ ---
-function calculateMolarity() {
-    const target = document.getElementById('molarityTarget').value;
-    const mwInput = document.getElementById('mol-mw');
-    const concInput = document.getElementById('input-mol-conc');
-    const massInput = document.getElementById('mol-mass');
-    const massUnit = parseFloat(document.getElementById('mol-mass-unit').value);
-    const volInput = document.getElementById('mol-vol');
-    const volUnit = parseFloat(document.getElementById('mol-vol-unit').value);
-    
-    const resultBox = document.getElementById('molarityResultBox');
-    const errorBox = document.getElementById('molarityErrorBox');
-    const formulaTitle = document.getElementById('molarityFormulaTitle');
-    const stepsDiv = document.getElementById('molaritySteps');
-    const resultValue = document.getElementById('molarityResultValue');
-
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
-
-    const mw = parseFloat(mwInput.value);
-    if (isNaN(mw) || mw <= 0) return showMolarityError("Please enter a valid Molecular Weight.");
-
-    // ฟังก์ชันจัดฟอร์แมตตัวเลขวิทยาศาสตร์ให้อ่านง่าย
-    const fmt = (num) => {
-        if (num === 0) return "0";
-        if (Math.abs(num) < 0.0001 || Math.abs(num) > 99999) return num.toExponential(4);
-        return num.toLocaleString(undefined, { maximumFractionDigits: 5 });
-    };
-
-    // แยก Case คำนวณตามตัวแปรที่เลือก
-    if (target === 'M') {
-        // --- CASE 1: หาความเข้มข้น Molarity (M) ---
-        const massRaw = parseFloat(massInput.value);
-        const volRaw = parseFloat(volInput.value);
-        
-        if (isNaN(massRaw) || massRaw <= 0) return showMolarityError("Please enter a valid Mass of Solute.");
-        if (isNaN(volRaw) || volRaw <= 0) return showMolarityError("Please enter a valid Solution Volume.");
-        
-        const massGrams = massRaw * massUnit;
-        const volLiters = volRaw * volUnit;
-        const moles = massGrams / mw;
-        const molarity = moles / volLiters;
-        
-        formulaTitle.innerText = "📝 Formula: Molarity = Moles / Volume (L)";
-        stepsDiv.innerHTML = `
-            <strong>Step 1: Calculate Moles of Solute</strong><br>
-            &bull; Moles = Mass (${fmt(massGrams)} g) / MW (${fmt(mw)} g/mol) = <strong>${moles.toFixed(4)} mol</strong><br><br>
-            <strong>Step 2: Calculate Molarity</strong><br>
-            &bull; Molarity = Moles / Volume = ${fmt(moles)} mol / ${fmt(volLiters)} L = <strong>${molarity.toFixed(4)} M</strong>
-        `;
-        resultValue.innerText = `${molarity.toFixed(4)} M`;
-        
-    } else if (target === 'mass') {
-        // --- CASE 2: หามวลสารที่ต้องชั่ง (Mass, g) ---
-        const conc = parseFloat(concInput.value);
-        const volRaw = parseFloat(volInput.value);
-        
-        if (isNaN(conc) || conc <= 0) return showMolarityError("Please enter a valid Concentration (Molarity).");
-        if (isNaN(volRaw) || volRaw <= 0) return showMolarityError("Please enter a valid Solution Volume.");
-        
-        const volLiters = volRaw * volUnit;
-        // สูตร: Mass (g) = M * V(L) * MW
-        const massGrams = conc * volLiters * mw;
-        
-        formulaTitle.innerText = "📝 Formula: Mass (g) = Molarity &times; Volume (L) &times; MW";
-        stepsDiv.innerHTML = `
-            <strong>Step 1: Calculate Mass in Grams</strong><br>
-            &bull; Mass = ${fmt(conc)} M &times; ${fmt(volLiters)} L &times; ${fmt(mw)} g/mol<br>
-            &bull; Mass = <strong>${massGrams.toFixed(4)} g</strong>
-        `;
-        resultValue.innerText = `${massGrams.toFixed(4)} g`;
-        
-    } else if (target === 'vol') {
-        // --- CASE 3: หาปริมาตรสารละลายที่ต้องใช้ (Volume) ---
-        const conc = parseFloat(concInput.value);
-        const massRaw = parseFloat(massInput.value);
-        
-        if (isNaN(conc) || conc <= 0) return showMolarityError("Please enter a valid Concentration (Molarity).");
-        if (isNaN(massRaw) || massRaw <= 0) return showMolarityError("Please enter a valid Mass of Solute.");
-        
-        const massGrams = massRaw * massUnit;
-        // สูตร: V(L) = Mass(g) / (M * MW)
-        const volLiters = massGrams / (conc * mw);
-        const volMl = volLiters / 0.001; // แปลงกลับเป็น mL เพื่อให้อ่านง่าย
-        
-        formulaTitle.innerText = "📝 Formula: Volume (L) = Mass (g) / (Molarity &times; MW)";
-        stepsDiv.innerHTML = `
-            <strong>Step 1: Calculate Volume in Liters</strong><br>
-            &bull; Volume (L) = ${fmt(massGrams)} g / (${fmt(conc)} M &times; ${fmt(mw)} g/mol)<br>
-            &bull; Volume = <strong>${volLiters.toFixed(5)} L</strong><br><br>
-            <strong>Step 2: Convert to Milliliters (mL)</strong><br>
-            &bull; Volume = ${volLiters.toFixed(5)} L &times; 1000 = <strong>${volMl.toFixed(2)} mL</strong>
-        `;
-        resultValue.innerText = `${volMl.toFixed(2)} mL`;
-    }
-
-    resultBox.style.display = 'block';
-}
-
-function showMolarityError(message) {
-    const errorBox = document.getElementById('molarityErrorBox');
-    errorBox.innerText = message;
-    errorBox.style.display = 'block';
-}
-
-
-// --- ฟังก์ชันควบคุมหน้าต่างป้อนข้อมูลแท็บ Solution Prep ---
-function toggleSolPrepInputs() {
-    const mode = document.getElementById('solPrepMode').value;
-    const unitLabel = document.getElementById('unit-sol-conc');
-    const stockGroup = document.getElementById('group-sol-stock');
-    
-    // รีเซ็ตการซ่อนกล่องผลลัพธ์เก่าก่อน
-    document.getElementById('solPrepResultBox').style.display = 'none';
-    document.getElementById('solPrepErrorBox').style.display = 'none';
-    
-    // ซ่อน/แสดงกลุ่มความเข้มข้นของ Stock
-    if (mode === 'ppmStock') {
-        stockGroup.style.display = 'grid';
-    } else {
-        stockGroup.style.display = 'none';
-    }
-
-    // ปรับหน่วยตามโหมดที่เลือก
-    if (mode === 'wv') unitLabel.innerText = '% w/v';
-    else if (mode === 'vv') unitLabel.innerText = '% v/v';
-    else if (mode === 'ppmSolid' || mode === 'ppmStock') unitLabel.innerText = 'ppm';
-}
-
-// เรียกดีฟอลต์ให้สลับช่องถูกเมื่อรีโหลด
-setTimeout(toggleSolPrepInputs, 150);
-
-// --- ฟังก์ชันหลักในการคำนวณการเตรียมสารละลาย ---
-function calculateSolutionPrep() {
-    const mode = document.getElementById('solPrepMode').value;
-    const concInput = document.getElementById('sol-conc');
-    const volInput = document.getElementById('sol-vol');
-    const volUnitFactor = parseFloat(document.getElementById('sol-vol-unit').value); // mL = 0.001, L = 1
-    
-    const resultBox = document.getElementById('solPrepResultBox');
-    const errorBox = document.getElementById('solPrepErrorBox');
-    const stepsDiv = document.getElementById('solPrepSteps');
-    const resultValue = document.getElementById('solPrepResultValue');
-
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
-
-    const conc = parseFloat(concInput.value);
-    const volRaw = parseFloat(volInput.value);
-
-    // ตรวจสอบข้อมูลนำเข้าเบื้องต้น
-    if (isNaN(conc) || conc <= 0) return showSolPrepError("Please enter a valid Target Concentration.");
-    if (isNaN(volRaw) || volRaw <= 0) return showSolPrepError("Please enter a valid Solution Volume.");
-
-    // แปลงปริมาตรรวมให้อยู่ในรูปหน่วย mL และ L เพื่อใช้ในสูตร
-    const volInMl = volUnitFactor === 1 ? volRaw * 1000 : volRaw;
-    const volInLiters = volUnitFactor === 1 ? volRaw : volRaw * 0.001;
-
-    const fmt = (num) => {
-        if (num === 0) return "0";
-        if (Math.abs(num) < 0.0001) return num.toExponential(4);
-        return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
-    };
-
-    if (mode === 'wv') {
-        // --- CASE 1: % w/v (Weight in grams per 100 mL of solution) ---
-        // สูตร: g = (% w/v * mL) / 100
-        const massGrams = (conc * volInMl) / 100;
-        
-        stepsDiv.innerHTML = `
-            <strong>Formula: Mass (g) = (% w/v &times; Volume in mL) / 100</strong><br>
-            &bull; Mass = (${fmt(conc)} &times; ${fmt(volInMl)} mL) / 100<br>
-            &bull; Mass = <strong>${fmt(massGrams)} g</strong><br><br>
-            <strong>🧪 Lab Protocol:</strong><br>
-            1. Weigh out exactly <strong>${fmt(massGrams)} g</strong> of the solid solute.<br>
-            2. Dissolve the solute in a beaker with a portion of distilled water.<br>
-            3. Transfer to a volumetric flask and add solvent up to the final <strong>${fmt(volInMl)} mL</strong> mark.
-        `;
-        resultValue.innerText = `${fmt(massGrams)} g`;
-
-    } else if (mode === 'vv') {
-        // --- CASE 2: % v/v (Volume in mL per 100 mL of solution) ---
-        // สูตร: mL of solute = (% v/v * mL total) / 100
-        const volSoluteMl = (conc * volInMl) / 100;
-        
-        stepsDiv.innerHTML = `
-            <strong>Formula: Solute Vol (mL) = (% v/v &times; Total Volume in mL) / 100</strong><br>
-            &bull; Solute Volume = (${fmt(conc)} &times; ${fmt(volInMl)} mL) / 100<br>
-            &bull; Solute Volume = <strong>${fmt(volSoluteMl)} mL</strong><br><br>
-            <strong>🧪 Lab Protocol:</strong><br>
-            1. Measure exactly <strong>${fmt(volSoluteMl)} mL</strong> of the liquid solute using a pipette.<br>
-            2. Add into a volumetric flask filled with partial solvent.<br>
-            3. Dilute with solvent until the total volume reaches the <strong>${fmt(volInMl)} mL</strong> mark.
-        `;
-        resultValue.innerText = `${fmt(volSoluteMl)} mL`;
-
-    } else if (mode === 'ppmSolid') {
-        // --- CASE 3: ppm จากสารบริสุทธิ์แบบแข็ง (1 ppm = 1 mg / 1 L) ---
-        // สูตร: mg = ppm * L
-        const massMg = conc * volInLiters;
-        const massG = massMg / 1000;
-        
-        stepsDiv.innerHTML = `
-            <strong>Formula: Mass (mg) = ppm &times; Volume (L)</strong><br>
-            &bull; Mass = ${fmt(conc)} ppm &times; ${fmt(volInLiters)} L<br>
-            &bull; Mass = <strong>${fmt(massMg)} mg</strong> (${fmt(massG)} g)<br><br>
-            <strong>🧪 Lab Protocol:</strong><br>
-            1. Weigh out <strong>${fmt(massMg)} mg</strong> (or ${fmt(massG)} g) of solid solute.<br>
-            2. Completely dissolve it in a minor volume of solvent.<br>
-            3. Fill to volume up to the <strong>${fmt(volInMl)} mL</strong> line.
-        `;
-        resultValue.innerText = massMg >= 1 ? `${fmt(massMg)} mg` : `${fmt(massG)} g`;
-
-    } else if (mode === 'ppmStock') {
-        // --- CASE 4: ppm จากการเจือจาง Stock Solution (C1V1 = C2V2) ---
-        const stockConc = parseFloat(document.getElementById('sol-stock-conc').value);
-        if (isNaN(stockConc) || stockConc <= 0) return showSolPrepError("Please enter a valid Stock Concentration.");
-        if (stockConc <= conc) return showSolPrepError("Stock concentration must be higher than target concentration.");
-
-        // สูตร: V1 = (C2 * V2) / C1
-        const pipetteVolMl = (conc * volInMl) / stockConc;
-        
-        stepsDiv.innerHTML = `
-            <strong>Formula: V_stock = (C_target &times; V_target) / C_stock</strong><br>
-            &bull; V_stock = (${fmt(conc)} ppm &times; ${fmt(volInMl)} mL) / ${fmt(stockConc)} ppm<br>
-            &bull; V_stock = <strong>${fmt(pipetteVolMl)} mL</strong><br><br>
-            <strong>🧪 Lab Protocol:</strong><br>
-            1. Pipette exactly <strong>${fmt(pipetteVolMl)} mL</strong> from your ${fmt(stockConc)} ppm stock solution.<br>
-            2. Transfer it cleanly into a fresh volumetric flask.<br>
-            3. Fill up to the <strong>${fmt(volInMl)} mL</strong> line with distilled water and mix well.
-        `;
-        resultValue.innerText = `${fmt(pipetteVolMl)} mL`;
-    }
-
-    resultBox.style.display = 'block';
-}
-
-function showSolPrepError(message) {
-    const errorBox = document.getElementById('solPrepErrorBox');
-    errorBox.innerText = message;
-    errorBox.style.display = 'block';
-}
-
-// --- ชุดข้อมูลหน่วยวัดสำหรับหมวดหมู่ต่างๆ ---
-const unitOptions = {
-    concentration: [
-        { value: "1", text: "Molar (M)" },
-        { value: "0.001", text: "millimolar (mM)" },
-        { value: "0.000001", text: "micromolar (µM)" }
-    ],
-    volume: [
-        { value: "1", text: "Liter (L)" },
-        { value: "0.001", text: "milliliter (mL)" },
-        { value: "0.000001", text: "microliter (µL)" }
-    ],
-    mass: [
-        { value: "1", text: "Gram (g)" },
-        { value: "0.001", text: "milligram (mg)" },
-        { value: "0.000001", text: "microgram (µg)" }
-    ],
-    temperature: [
-        { value: "C", text: "Celsius (°C)" },
-        { value: "K", text: "Kelvin (K)" }
-    ]
-};
-
-// --- ฟังก์ชันอัปเดตตัวเลือกหน่วยใน Select Box เมื่อเปลี่ยนหมวดหมู่ ---
-function updateConverterUnits() {
-    const category = document.getElementById('convCategory').value;
-    const fromSelect = document.getElementById('convFromUnit');
-    const toSelect = document.getElementById('convToUnit');
-    const options = unitOptions[category];
-    
-    // เคลียร์ค่าเก่า
-    fromSelect.innerHTML = "";
-    toSelect.innerHTML = "";
-    
-    // ใส่ตัวเลือกใหม่
-    options.forEach((opt, index) => {
-        const fOpt = new Option(opt.text, opt.value);
-        const tOpt = new Option(opt.text, opt.value);
-        fromSelect.add(fOpt);
-        toSelect.add(tOpt);
-    });
-    
-    // ตั้งค่าเริ่มต้นให้หน่วยปลายทางเลือกตัวถัดไปจะได้ไม่ซ้ำกัน
-    if (options.length > 1) {
-        toSelect.selectedIndex = 1;
-    }
-    
-    // ล้างค่าผลลัพธ์เก่าและคำนวณใหม่
-    document.getElementById('convInput').value = "";
-    document.getElementById('convOutputDisplay').innerText = "0.00";
-    document.getElementById('converterResultBox').style.display = 'none';
-    document.getElementById('converterErrorBox').style.display = 'none';
-}
-
-// เรียกฟังก์ชันครั้งแรกเพื่อให้หน่วยโหลดเตรียมพร้อมไว้
-setTimeout(updateConverterUnits, 200);
-
-// --- ฟังก์ชันสลับหน่วยต้นทางและปลายทาง (Swap) ---
-function swapConverterUnits() {
-    const fromSelect = document.getElementById('convFromUnit');
-    const toSelect = document.getElementById('convToUnit');
-    
-    const tempIndex = fromSelect.selectedIndex;
-    fromSelect.selectedIndex = toSelect.selectedIndex;
-    toSelect.selectedIndex = tempIndex;
-    
-    calculateConversion();
-}
-
-// --- ฟังก์ชันหลักในการคำนวณการแปลงหน่วย ---
-function calculateConversion() {
-    const category = document.getElementById('convCategory').value;
-    const inputValRaw = document.getElementById('convInput').value;
-    const fromSelect = document.getElementById('convFromUnit');
-    const toSelect = document.getElementById('convToUnit');
-    
-    const outputDisplay = document.getElementById('convOutputDisplay');
-    const resultBox = document.getElementById('converterResultBox');
-    const errorBox = document.getElementById('converterErrorBox');
-    const stepsDiv = document.getElementById('converterSteps');
-    
-    // ซ่อนกล่องข้อมูลไว้ก่อนถ้ายังไม่ได้พิมพ์ค่า
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
-    
-    if (inputValRaw === "") {
-        outputDisplay.innerText = "0.00";
-        return;
-    }
-    
-    const value = parseFloat(inputValRaw);
-    if (isNaN(value)) {
-        outputDisplay.innerText = "Error";
-        return;
-    }
-
-    const fromText = fromSelect.options[fromSelect.selectedIndex].text;
-    const toText = toSelect.options[toSelect.selectedIndex].text;
-
-    const fmt = (num) => {
-        if (num === 0) return "0";
-        if (Math.abs(num) < 0.00001 || Math.abs(num) > 999999) return num.toExponential(4);
-        return num.toLocaleString(undefined, { maximumFractionDigits: 6 });
-    };
-
-    let result;
-    let stepsHTML = "";
-
-    if (category === 'temperature') {
-        // --- กรณีแปลงหน่วยอุณหภูมิ (คิดแบบบวกลบ) ---
-        const fromUnit = fromSelect.value;
-        const toUnit = toSelect.value;
-        
-        if (fromUnit === toUnit) {
-            result = value;
-            stepsHTML = `Same unit selected: <strong>${fmt(result)} ${fromUnit === 'C' ? '°C' : 'K'}</strong>`;
-        } else if (fromUnit === 'C' && toUnit === 'K') {
-            result = value + 271.15; // อิงตามหลักวิชาการทั่วไป 273.15
-            // เพื่อป้องกันเลขบั๊ก แก้เป็น 273.15 ตามมาตรฐานสากล
-            result = value + 273.15;
-            stepsHTML = `Formula: K = °C + 273.15<br>&bull; ${value} °C + 273.15 = <strong>${fmt(result)} K</strong>`;
-        } else if (fromUnit === 'K' && toUnit === 'C') {
-            if (value < 0) {
-                errorBox.innerText = "Temperature in Kelvin cannot be below Absolute Zero (0 K).";
-                errorBox.style.display = 'block';
-                outputDisplay.innerText = "Invalid";
-                return;
-            }
-            result = value - 273.15;
-            stepsHTML = `Formula: °C = K - 273.15<br>&bull; ${value} K - 273.15 = <strong>${fmt(result)} °C</strong>`;
-        }
-    } else {
-        // --- กรณีแปลงหน่วยความเข้มข้น, มวล, ปริมาตร (คิดแบบคูณ/หารด้วย Factor) ---
-        const fromFactor = parseFloat(fromSelect.value);
-        const toFactor = parseFloat(toSelect.value);
-        
-        // แปลงไปเป็นหน่วยฐาน (Base unit เช่น M, L, g) ก่อน จากนั้นแปลงไปเป็นหน่วยปลายทาง
-        const baseValue = value * fromFactor;
-        result = baseValue / toFactor;
-        
-        stepsHTML = `<strong>Conversion Steps:</strong><br>`;
-        stepsHTML += `&nbsp;&nbsp;&bull; Convert to base unit: ${fmt(value)} &times; ${fromFactor} = ${fmt(baseValue)}<br>`;
-        stepsHTML += `&nbsp;&nbsp;&bull; Convert to target unit: ${fmt(baseValue)} / ${toFactor} = <strong>${fmt(result)}</strong><br><br>`;
-        stepsHTML += `Result: <strong>${fmt(value)}</strong> ${fromText.split(' ')[1] || fromText} = <strong>${fmt(result)}</strong> ${toText.split(' ')[1] || toText}`;
-    }
-
-    outputDisplay.innerText = fmt(result);
-    stepsDiv.innerHTML = stepsHTML;
-    resultBox.style.display = 'block';
-}
-
-// 🔹 ตัวแปรเช็กสถานะทิศทางเริ่มต้น (true = กรดอยู่ในขวด Flask)
-let isAcidInFlask = true;
-
-// 🔹 ฟังก์ชันสลับทิศทางการไทเทรตเมื่อกดปุ่ม 🔁 (แก้ไข: ล็อกตำแหน่งหัวข้อ สลับเฉพาะชื่อสาร)
-function swapTitrationDirection() {
-    isAcidInFlask = !isAcidInFlask;
-    
-    const lblAnalyte = document.getElementById('lblAnalyte');
-    const lblTitrant = document.getElementById('lblTitrant');
-    
-    const lblConc1 = document.getElementById('lblConc1');
-    const lblVol1 = document.getElementById('lblVol1');
-    const lblConc2 = document.getElementById('lblConc2');
-
-    if (isAcidInFlask) {
-        // 🧪 สภาวะปกติ: กรด HCl อยู่ใน Flask (ฝั่งซ้าย) / เบส NaOH อยู่ใน Burette (ฝั่งขวา)
-        lblAnalyte.innerText = "HCl (Acid)";
-        lblTitrant.innerText = "NaOH (Base)";
-        
-        // ผูกป้ายคำอธิบายอินพุต: ฝั่งซ้ายเป็นสารตั้งต้นตัวที่ 1 (Flask)
-        lblConc1.innerText = "Concentration (C₁)";
-        lblVol1.innerText = "Volume (V₁) [mL]";
-        lblConc2.innerText = "Concentration (C₂)";
-    } else {
-        // 🧪 สภาวะสลับฝั่ง: เบส NaOH อยู่ใน Flask (ฝั่งซ้าย) / กรด HCl อยู่ใน Burette (ฝั่งขวา)
-        lblAnalyte.innerText = "NaOH (Base)";
-        lblTitrant.innerText = "HCl (Acid)";
-        
-        // ผูกป้ายคำอธิบายอินพุต: ปรับตัวแปรสูตรเคมีให้ตรงกับสารที่สลับเข้ามาอยู่ทางซ้าย
-        lblConc1.innerText = "Concentration (C₂)";
-        lblVol1.innerText = "Volume (V₂) [mL]";
-        lblConc2.innerText = "Concentration (C₁)";
-    }
-    
-    // อัปเดตการคำนวณและกราฟใหม่ทันทีหลังกดสลับ
-    runTitrationSim();
-}
-
-// 🔹 ฟังก์ชันซิงค์ค่าจาก Slider ไปยังช่อง Input ตัวเลข
-function syncTitInputFromSlider() {
-    const slider = document.getElementById('titSlider');
-    const input = document.getElementById('titVolAdded');
-    input.value = slider.value;
-    runTitrationSim();
-}
-
-// 🔹 ฟังก์ชันซิงค์ค่าจากช่อง Input ตัวเลขกลับมาที่ Slider
-function syncTitSliderFromInput() {
-    const slider = document.getElementById('titSlider');
-    const input = document.getElementById('titVolAdded');
-    let val = parseFloat(input.value) || 0;
-    
-    // ดักไม่ให้ค่าเกิน Max ของสไลเดอร์
-    let maxVal = parseFloat(slider.max) || 100;
-    if (val > maxVal) val = maxVal;
-    if (val < 0) val = 0;
-    
-    slider.value = val;
-    runTitrationSim();
-}
-
-// 🔹 ฟังก์ชันคำนวณและวาดกราฟหลัก
-function runTitrationSim() {
-    // 1. ดึงค่าอินพุตจากหน้าจอ
-    const c1 = parseFloat(document.getElementById('titConc1').value) || 0.1;
-    const v1 = parseFloat(document.getElementById('titVol1').value) || 50;
-    const c2 = parseFloat(document.getElementById('titConc2').value) || 0.1;
-    const vAdded = parseFloat(document.getElementById('titVolAdded').value) || 0;
-
-    // แยกตัวแปรตามทิศทาง
-    let c_flask = isAcidInFlask ? c1 : c2;
-    let v_flask = v1;
-    let c_burette = isAcidInFlask ? c2 : c1;
-
-    // 2. คำนวณจุดสมมูล (Equivalence Point)
-    let v_equiv = 0;
-    if (c_burette > 0) {
-        v_equiv = (c_flask * v_flask) / c_burette;
-    }
-    document.getElementById('txtEquivVol').innerText = v_equiv.toFixed(2);
-    
-    // ปรับสเกล Max Slider
-    const newMax = Math.max(100, Math.ceil(v_equiv * 1.5));
-    const slider = document.getElementById('titSlider');
-    slider.max = newMax;
-    document.getElementById('sliderMaxLabel').innerText = `Max: ${newMax} mL`;
-
-    // 3. คำนวณ pH ปัจจุบัน
-    let pH = 7.0;
-    let chemicalState = "Neutralized";
-    let liquidColorHex = "#ffffff"; 
-    
-    let mole_flask = (c_flask * v_flask) / 1000;
-    let mole_added = (c_burette * vAdded) / 1000;
-    let v_total_liters = (v_flask + vAdded) / 1000;
-
-    if (isAcidInFlask) {
-        if (mole_added < mole_flask) {
-            let mole_remain_H = mole_flask - mole_added;
-            let conc_H = mole_remain_H / v_total_liters;
-            pH = -Math.log10(conc_H);
-            chemicalState = "Excess acid in flask";
-            liquidColorHex = "rgba(255, 255, 255, 1)";
-        } else if (mole_added > mole_flask) {
-            let mole_remain_OH = mole_added - mole_flask;
-            let conc_OH = mole_remain_OH / v_total_liters;
-            let pOH = -Math.log10(conc_OH);
-            pH = 14 - pOH;
-            chemicalState = "Excess base in flask";
-            liquidColorHex = "rgba(255, 105, 180, 0.4)";
-        } else {
-            pH = 7.0;
-            chemicalState = "Equivalence point (Neutral)";
-            liquidColorHex = "rgba(255, 182, 193, 0.2)";
-        }
-    } else {
-        if (mole_added < mole_flask) {
-            let mole_remain_OH = mole_flask - mole_added;
-            let conc_OH = mole_remain_OH / v_total_liters;
-            let pOH = -Math.log10(conc_OH);
-            pH = 14 - pOH;
-            chemicalState = "Excess base in flask";
-            liquidColorHex = "rgba(255, 105, 180, 0.4)";
-        } else if (mole_added > mole_flask) {
-            let mole_remain_H = mole_added - mole_flask;
-            let conc_H = mole_remain_H / v_total_liters;
-            pH = -Math.log10(conc_H);
-            chemicalState = "Excess acid in flask";
-            liquidColorHex = "rgba(255, 255, 255, 1)";
-        } else {
-            pH = 7.0;
-            chemicalState = "Equivalence point (Neutral)";
-            liquidColorHex = "rgba(255, 182, 193, 0.2)";
-        }
-    }
-
-    // 4. แสดงข้อมูลบน UI
-    document.getElementById('txtCurrentAdded').innerText = vAdded.toFixed(1);
-    document.getElementById('txtCurrentPH').innerText = `pH = ${pH.toFixed(2)}`;
-    document.getElementById('txtChemicalState').innerText = chemicalState;
-    document.getElementById('liquidColor').style.backgroundColor = liquidColorHex;
-
-    // 5. วาดกราฟลงบน Canvas
-    drawTitrationCurve(newMax, v_flask, c_flask, c_burette, vAdded, pH);
-}
-
-// 🔹 ฟังก์ชันวาดกราฟลง Canvas
-function drawTitrationCurve(maxVol, v_flask, c_flask, c_burette, currentX, currentY) {
-    const canvas = document.getElementById('titrationCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const paddingLeft = 40;
-    const paddingBottom = 35;
-    const paddingTop = 20;
-    const paddingRight = 20;
-    
-    const graphWidth = canvas.width - paddingLeft - paddingRight;
-    const graphHeight = canvas.height - paddingTop - paddingBottom;
-
-    ctx.strokeStyle = '#6c757d';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(paddingLeft, paddingTop);
-    ctx.lineTo(paddingLeft, canvas.height - paddingBottom);
-    ctx.lineTo(canvas.width - paddingRight, canvas.height - paddingBottom);
-    ctx.stroke();
-
-    function getPixelX(vol) { return paddingLeft + (vol / maxVol) * graphWidth; }
-    function getPixelY(ph) { return canvas.height - paddingBottom - (ph / 14) * graphHeight; }
-
-    ctx.fillStyle = '#adb5bd';
-    ctx.font = '10px Quicksand, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    [0, 2, 4, 6, 7, 8, 10, 12, 14].forEach(ph => {
-        let y = getPixelY(ph);
-        ctx.fillText(ph, paddingLeft - 8, y);
-        ctx.strokeStyle = ph === 7 ? 'rgba(40, 167, 69, 0.2)' : '#e9ecef';
-        ctx.lineWidth = ph === 7 ? 1.5 : 1;
-        ctx.beginPath();
-        ctx.moveTo(paddingLeft, y);
-        ctx.lineTo(canvas.width - paddingRight, y);
-        ctx.stroke();
-    });
-
-    ctx.strokeStyle = isAcidInFlask ? '#ff6b6b' : '#4dabf7';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-
-    let firstPoint = true;
-    for (let xVol = 0; xVol <= maxVol; xVol += 0.5) {
-        let mole_f = (c_flask * v_flask) / 1000;
-        let mole_b = (c_burette * xVol) / 1000;
-        let v_tot = (v_flask + xVol) / 1000;
-        let yPH = 7.0;
-
-        if (isAcidInFlask) {
-            if (mole_b < mole_f) {
-                yPH = -Math.log10((mole_f - mole_b) / v_tot);
-            } else if (mole_b > mole_f) {
-                yPH = 14 - (-Math.log10((mole_b - mole_f) / v_tot));
-            }
-        } else {
-            if (mole_b < mole_f) {
-                yPH = 14 - (-Math.log10((mole_f - mole_b) / v_tot));
-            } else if (mole_b > mole_f) {
-                yPH = -Math.log10((mole_b - mole_f) / v_tot);
-            }
-        }
-        
-        if (yPH < 0) yPH = 0;
-        if (yPH > 14) yPH = 14;
-
-        let px = getPixelX(xVol);
-        let py = getPixelY(yPH);
-
-        if (firstPoint) {
-            ctx.moveTo(px, py);
-            firstPoint = false;
-        } else {
-            ctx.lineTo(px, py);
-        }
-    }
-    ctx.stroke();
-
-    let curPx = getPixelX(currentX);
-    let curPy = getPixelY(currentY);
-    
-    ctx.fillStyle = '#e64980';
-    ctx.beginPath();
-    ctx.arc(curPx, curPy, 6, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-}
-
-// สั่งทำงานตอนเปิดหน้าเว็บ
-window.addEventListener('DOMContentLoaded', () => {
-    runTitrationSim();
-});
-
-</script>
-
 </body>
-</html>
+    
+<!-- Workspace End -->    
+
+
