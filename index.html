@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧪 Little Scientist's Lab</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- import script -->
-    <script src="main.js"></script>
-    <script src="dilution.js"></script>
-    <script src="molarity.js"></script>
-    <script src="molecular-weight.js"></script>
-    <script src="solution-preparation.js"></script>
-    <script src="titration.js"></script>
-    <script src="unit-converter.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/solution-chemistry/dilution.js"></script>
+    <script src="js/solution-chemistry/molarity.js"></script>
+    <script src="js/solution-chemistry/molecular-weight.js"></script>
+    <script src="js/solution-chemistry/solution-preparation.js"></script>
+    <script src="js/chemistry-analysis/titration.js"></script>
+    <script src="js/laboratory-utilities/unit-converter.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -528,6 +528,8 @@
                         
                         <button id="calculateTitrationBtn" class="calc-btn" onclick="calculateTitration()">Calculate ✨</button>
 
+                        <div id="titrationErrorBox" class="error-box" style="display:none;"></div>
+
                         <!-- Titration Result -->
                         <div id="titrationResultBox" class="result-box" style="text-align:left; padding:20px;">
                             <div style="font-weight:700; color:var(--primary-dark); margin-bottom:8px;">📝 Formula: C₁V₁ = C₂V₂</div>
@@ -610,6 +612,8 @@
 
                         <button id="calculateAnalysisBtn" class="calc-btn" onclick="calculateAnalysis()">Calculate ✨</button>
 
+                        <div id="analysisErrorBox" class="error-box" style="display:none;"></div>
+
                         <!-- Analysis Result -->
                         <div id="analysisResultBox" class="result-box" style="text-align:left; padding:20px;">
                             <div style="font-size:14px; font-weight:700; color:var(--primary);">
@@ -626,6 +630,16 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
+                <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
+                    <h4 style="margin: 0 0 6px 0; font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 15px;">💡 Note</h4>
+                    <p style="margin: 0; font-size: 12.5px; color: #495057; line-height: 1.5; font-weight: 500;">
+                        Slight differences between your results and other results are completely normal!<br><br> In the real laboratory, measurement precision and endpoint observation can vary from person to person. These small differences are part of <b>Human Error</b> and the experimental process.<br><br>
+                        A good scientist always records real experimental data honestly and learns from the results they obtain. 💖
+                    </p>
+                </div>
+
             </div>
         </div>
 

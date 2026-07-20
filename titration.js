@@ -6,149 +6,101 @@ let titrationResult = {
 
 // Acid Database
 const acidData = {
-    HCl: {
-        name: "Hydrochloric Acid (HCl)",
-        mw: 36.46
-    },
-
-    HNO3: {
-        name: "Nitric Acid (HNO₃)",
-        mw: 63.01
-    },
-
-    HBr: {
-        name: "Hydrobromic Acid (HBr)",
-        mw: 80.91
-    },
-
-    HI: {
-        name: "Hydroiodic Acid (HI)",
-        mw: 127.91
-    },
-
-    HClO4: {
-        name: "Perchloric Acid (HClO₄)",
-        mw: 100.45
-    }
+    HCl: { name: "Hydrochloric Acid (HCl)", mw: 36.46 },
+    HNO3: { name: "Nitric Acid (HNO₃)", mw: 63.01 },
+    HBr: { name: "Hydrobromic Acid (HBr)", mw: 80.91 },
+    HI: { name: "Hydroiodic Acid (HI)", mw: 127.91 },
+    HClO4: { name: "Perchloric Acid (HClO₄)", mw: 100.45 }
 };
 
 // Auto Fill Molecular Weight
 function updateAcidData() {
-
-    const acid = document.getElementById("analyteSelect").value;
+    const analyteSelect = document.getElementById("analyteSelect");
     const mwBox = document.getElementById("molecularWeight");
+    if (!analyteSelect || !mwBox) return;
 
+    const acid = analyteSelect.value;
     if (acidData[acid]) {
-
         mwBox.value = acidData[acid].mw;
-    }
-
-    else {
+    } else {
         mwBox.value = "";
     }
 }
 
-// Calculate Titration
-// C1V1 = C2V2
+// Calculate Titration (C1V1 = C2V2)
 function calculateTitration() {
-    const C1Input = parseFloat(
-        document.getElementById("titrantConc").value
-    );
-    const C1Unit =
-        document.getElementById("titrantConcUnit").value;
+    const resultBox = document.getElementById("titrationResultBox");
+    const errorBox = document.getElementById("titrationErrorBox");
 
+    if (resultBox) resultBox.style.display = "none";
+    if (errorBox) errorBox.style.display = "none";
 
-    const V1Input = parseFloat(
-        document.getElementById("titrantVol").value
-    );
-    const V1Unit =
-        document.getElementById("titrantVolUnit").value;
+    const titrantConcEl = document.getElementById("titrantConc");
+    const titrantConcUnitEl = document.getElementById("titrantConcUnit");
+    const titrantVolEl = document.getElementById("titrantVol");
+    const titrantVolUnitEl = document.getElementById("titrantVolUnit");
+    const sampleVolEl = document.getElementById("sampleVol");
+    const sampleVolUnitEl = document.getElementById("sampleVolUnit");
 
-
-    const V2Input = parseFloat(
-        document.getElementById("sampleVol").value
-    );
-    const V2Unit =
-        document.getElementById("sampleVolUnit").value;
-
-
-    const resultBox =
-        document.getElementById("titrationResultBox");
-
-    const stepBox =
-        document.getElementById("titrationSteps");
-
-    const result =
-        document.getElementById("sampleConcResult");
-
-    // ตรวจสอบข้อมูล
-    if (
-        isNaN(C1Input) ||
-        isNaN(V1Input) ||
-        isNaN(V2Input)
-    )
-    {
-        alert("Please fill all titration data.");
+    if (!titrantConcEl || !titrantVolEl || !sampleVolEl) {
+        showCustomError("titrationErrorBox", "Missing required input fields in HTML.");
         return;
     }
 
-    // แปลง Concentration เป็น M
-    let C1 = C1Input;
+    const C1Input = parseFloat(titrantConcEl.value);
+    const C1Unit = titrantConcUnitEl ? titrantConcUnitEl.value : "M";
+    const V1Input = parseFloat(titrantVolEl.value);
+    const V1Unit = titrantVolUnitEl ? titrantVolUnitEl.value : "mL";
+    const V2Input = parseFloat(sampleVolEl.value);
+    const V2Unit = sampleVolUnitEl ? sampleVolUnitEl.value : "mL";
 
-    if(C1Unit === "mM"){
+    const stepBox = document.getElementById("titrationSteps");
+    const result = document.getElementById("sampleConcResult");
 
-        C1 = C1Input / 1000;
-
+    if (isNaN(C1Input) || isNaN(V1Input) || isNaN(V2Input)) {
+        showCustomError("titrationErrorBox", "Please fill all titration data.");
+        return;
     }
 
-    // แปลง Volume เป็น L
+    // Convert concentration to M
+    let C1 = C1Input;
+    if (C1Unit === "mM") C1 = C1Input / 1000;
+
+    // Convert volume to L
     let V1 = V1Input;
     let V2 = V2Input;
+    if (V1Unit === "mL") V1 = V1Input / 1000;
+    if (V2Unit === "mL") V2 = V2Input / 1000;
 
-    if(V1Unit === "mL"){
-
-        V1 = V1Input / 1000;
-
+    if (V2 === 0) {
+        showCustomError("titrationErrorBox", "Sample volume cannot be zero.");
+        return;
     }
 
-    if(V2Unit === "mL"){
-
-        V2 = V2Input / 1000;
-
-    }
-
-    // สูตร C1V1=C2V2
+    // C1V1 = C2V2
     const C2 = (C1 * V1) / V2;
     titrationResult.concentration = C2;
 
-    // แสดงผล
-    stepBox.innerHTML = `
+    if (stepBox) {
+        stepBox.innerHTML = `
+        C₂ = (C₁ × V₁) / V₂
+        <br><br>
+        C₂ = (${C1.toFixed(4)} × ${V1.toFixed(4)}) / ${V2.toFixed(4)}
+        <br><br>
+        C₂ = ${C2.toFixed(4)} mol/L
+        `;
+    }
 
-    C₂ = (C₁ × V₁) / V₂
-
-    <br><br>
-
-    C₂ = (${C1.toFixed(4)} × ${V1.toFixed(4)})
-    / ${V2.toFixed(4)}
-
-    <br><br>
-
-    C₂ = ${C2.toFixed(4)} mol/L
-
-    `;
-
-    result.innerHTML =
-        C2.toFixed(4);
-    resultBox.style.display = "block";
-
+    if (result) result.innerHTML = C2.toFixed(4);
+    if (resultBox) resultBox.style.display = "block";
 }
 
-// Add Dilution Step
-function addDilutionStep(){
-    const container =
-        document.getElementById("dilutionContainer");
-    const stepNumber =
-        container.children.length + 1;
+// Add Dilution Step Dynamically
+function addDilutionStep() {
+    const container = document.getElementById("dilutionContainer");
+    if (!container) return;
+    
+    const stepNumber = container.children.length + 1;
     const newStep = document.createElement("div");
 
     newStep.className = "dilution-step";
@@ -160,419 +112,227 @@ function addDilutionStep(){
     `;
 
     newStep.innerHTML = `
-    <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:12px;
-    ">
-
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <b style="font-size:13px;">Dilution Step ${stepNumber}</b>
-
-        <button
-        onclick="removeDilutionStep(this)"
-        style="background:#fff; color:#fb6f92; border:2px solid #ffc2d1;
-        border-radius:12px; padding:5px 12px; font-family:'Quicksand',sans-serif;
-        font-weight:700; cursor:pointer;">✕</button>
+        <button type="button" onclick="removeDilutionStep(this)" style="background:#fff; color:#fb6f92; border:2px solid #ffc2d1; border-radius:12px; padding:5px 12px; font-family:'Quicksand',sans-serif; font-weight:700; cursor:pointer;">✕</button>
     </div>
-
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-
         <div class="input-group">
             <label>Transfer Volume</label>
-
             <div style="display:grid; grid-template-columns:1fr 70px; gap:10px;">
-            <input
-                type="number"
-                class="dilutionInput"
-                data-type="transferVolume"
-                placeholder="Transfer Volume">
-
-            <span style="padding:12px 0; text-align:center;">mL</span>
-        </div>
-    </div>    
-
-    <div class="input-group">
-        <label>Total Volume</label>
-
-        <div style="display:grid; grid-template-columns:1fr 70px; gap:10px;">
-            <input
-                type="number"
-                class="dilutionInput"
-                data-type="finalVolume"
-                placeholder="Volume">
-
-            <span style="padding:12px 0; text-align:center;">mL</span>
+                <input type="number" class="dilutionInput" data-type="transferVolume" placeholder="Transfer Volume">
+                <span style="padding:12px 0; text-align:center;">mL</span>
+            </div>
+        </div>    
+        <div class="input-group">
+            <label>Total Volume</label>
+            <div style="display:grid; grid-template-columns:1fr 70px; gap:10px;">
+                <input type="number" class="dilutionInput" data-type="finalVolume" placeholder="Volume">
+                <span style="padding:12px 0; text-align:center;">mL</span>
+            </div>
         </div>
     </div>
-
-</div>
-
     `;
-     container.appendChild(newStep);
+    container.appendChild(newStep);
 }
 
-function removeDilutionStep(button){
+function removeDilutionStep(button) {
     const step = button.closest(".dilution-step");
-    step.remove();
-    updateDilutionStepNumber();
+    if (step) {
+        step.remove();
+        updateDilutionStepNumber();
+    }
 }
 
-function updateDilutionStepNumber(){
+function updateDilutionStepNumber() {
     const steps = document.querySelectorAll(".dilution-step");
-    steps.forEach((step,index)=>{
+    steps.forEach((step, index) => {
         const title = step.querySelector("b");
-        if(title){
-          title.innerText = `Dilution Step ${index+1}`;
+        if (title) {
+            title.innerText = `Dilution Step ${index + 1}`;
         }
     });
 }
 
+// Calculate Final Analysis
+function calculateAnalysis() {
+    const resultBox = document.getElementById("analysisResultBox");
+    const errorBox = document.getElementById("analysisErrorBox");
 
-function calculateAnalysis(){
+    if (resultBox) resultBox.style.display = "none";
+    if (errorBox) errorBox.style.display = "none";
 
-    if(titrationResult.concentration === 0){
-        alert("Please calculate titration first.");
+    if (titrationResult.concentration === 0) {
+        showCustomError("analysisErrorBox", "Please calculate titration first.");
         return;
     }
 
-    const acid =
-        document.getElementById("analyteSelect").value;
-
-    if(!acid){
-        alert("Please select analyte.");
+    const analyteSelect = document.getElementById("analyteSelect");
+    if (!analyteSelect || !analyteSelect.value) {
+        showCustomError("analysisErrorBox", "Please select analyte.");
         return;
     }
 
-    const sampleAmount =
-        parseFloat(document.getElementById("sampleAmount").value);
-
-    if(isNaN(sampleAmount)){
-        alert("Please enter sample amount.");
+    const sampleAmountEl = document.getElementById("sampleAmount");
+    const sampleAmount = sampleAmountEl ? parseFloat(sampleAmountEl.value) : NaN;
+    if (isNaN(sampleAmount) || sampleAmount <= 0) {
+        showCustomError("analysisErrorBox", "Please enter a valid sample amount.");
         return;
     }
 
-    const percentType =
-        document.querySelector('input[name="percentType"]:checked');
-
-    if(!percentType){
-        alert("Please choose calculation type.");
+    const percentType = document.querySelector('input[name="percentType"]:checked');
+    if (!percentType) {
+        showCustomError("analysisErrorBox", "Please choose calculation type.");
         return;
     }
 
-    const mw =
-        parseFloat(document.getElementById("molecularWeight").value);
+    const mwEl = document.getElementById("molecularWeight");
+    const mw = mwEl ? parseFloat(mwEl.value) : NaN;
+    if (isNaN(mw) || mw <= 0) {
+        showCustomError("analysisErrorBox", "Invalid molecular weight.");
+        return;
+    }
 
-    const sampleUnit =
-        document.getElementById("sampleAmountUnit").value;
+    const dilutionSteps = getDilutionSteps();
+    
+    // คำนวณหา Dilution Factor ของกระบวนการทั้งหมด
+    const dilutionFactor = calculateDilutionFactor(dilutionSteps);
 
-    const dilutionSteps =
-        getDilutionSteps();
+    // ความเข้มข้นดั้งเดิมก่อนเจือจาง
+    const originalConcentration = titrationResult.concentration * dilutionFactor;
+    titrationResult.originalConcentration = originalConcentration;
 
-    // ===========================
-    // Total Dilution Factor
-    // ===========================
-
-    const dilutionFactor =
-        calculateDilutionFactor(dilutionSteps);
-
-    // ===========================
-    // Original Concentration
-    // ===========================
-
-    const originalConcentration =
-        titrationResult.concentration *
-        dilutionFactor;
-
-    titrationResult.originalConcentration =
-        originalConcentration;
-
-    // ===========================
-    // Moles in Original Flask
-    // ===========================
-
-    // Step 1 Total Volume (mL)
-    const originalVolume =
-        dilutionSteps[0].finalVolume / 1000;
+    // คำนวณหาปริมาตรตั้งต้นของขวดแรก (ถ้าไม่มีขั้นตอนเจือจางที่สร้างเพิ่มขึ้นมา ให้ถือว่าใช้วิธีคำนวณฐาน 100mL หรืออิงปริมาตรตัวอย่าง)
+    let originalVolume = 0.1; // ค่า Default 100 mL ในหน่วยลิตรป้องกันการค้างกรณีไม่มีขั้นตอนเจือจาง
+    if (dilutionSteps.length > 0 && dilutionSteps[0].finalVolume > 0) {
+        originalVolume = dilutionSteps[0].finalVolume / 1000;
+    }
 
     // mol = M × V
-    const analyteMoles =
-        originalConcentration *
-        originalVolume;
+    const analyteMoles = originalConcentration * originalVolume;
+    titrationResult.moles = analyteMoles;
 
-    // เก็บไว้
-    titrationResult.moles =
-        analyteMoles;
+    // กรัม = mol × MW
+    const analyteMass = analyteMoles * mw;
 
-    console.log(
-        "Original Volume =",
-        originalVolume,
-        "L"
-    );
+    // คำนวณร้อยละ (%)
+    let composition = (analyteMass / sampleAmount) * 100;
 
-    console.log(
-        "Analyte Moles =",
-        analyteMoles,
-        "mol"
-    );
+    // นำไปแสดงผลลัพธ์บน UI
+    const compositionResultEl = document.getElementById("compositionResult");
+    const analyteAmountResultEl = document.getElementById("analyteAmountResult");
 
-    // ===========================
-    // Analyte Mass
-    // ===========================
-
-    // gram = mol × MW
-    const analyteMass =
-        analyteMoles * mw;
-
-    // ===========================
-    // Composition (%)
-    // ===========================
-
-    let composition = 0;
-
-    // %(w/w)
-    if(percentType.value === "ww"){
-
-        composition =
-            (analyteMass / sampleAmount) * 100;
-
-    }
-
-    // %(w/v)
-    else{
-
-        composition =
-            (analyteMass / sampleAmount) * 100;
-
-    }
-
-    document.getElementById(
-        "compositionResult"
-    ).innerHTML =
-        composition.toFixed(2) + " %";
-
-    console.log(
-        "Analyte Mass =",
-        analyteMass,
-        "g"
-    );
-
-    document.getElementById(
-        "analyteAmountResult"
-    ).innerHTML =
-        analyteMass.toFixed(4) + " g";
-
-    document.getElementById(
-        "analysisResultBox"
-    ).style.display = "block";
-
-    // ===========================
-    // Debug
-    // ===========================
-
-    console.log("Acid =", acid);
-    console.log("MW =", mw);
-    console.log("Sample Weight =", sampleAmount);
-    console.log("Sample Unit =", sampleUnit);
-    console.log("Percent Type =", percentType.value);
-
-    console.log("Dilution Steps =", dilutionSteps);
-    console.log("Dilution Factor =", dilutionFactor);
-
-    console.log("Concentration in Flask =", titrationResult.concentration);
-    console.log("Original Concentration =", originalConcentration);
-
+    if (compositionResultEl) compositionResultEl.innerHTML = composition.toFixed(2) + " %";
+    if (analyteAmountResultEl) analyteAmountResultEl.innerHTML = analyteMass.toFixed(4) + " g";
+    if (resultBox) resultBox.style.display = "block";
 }
 
-
-function getDilutionSteps(){
-
-    const steps =
-        document.querySelectorAll(".dilution-step");
-
+// ปรับปรุงการเก็บลำดับขั้นให้ปลอดภัย แม้ไม่มีกล่อง Step 1 ใน UI
+function getDilutionSteps() {
+    const steps = document.querySelectorAll(".dilution-step");
     let dilutionData = [];
 
-    steps.forEach((step, index)=>{
+    steps.forEach((step) => {
+        const finalVolEl = step.querySelector('[data-type="finalVolume"]');
+        const transferVolEl = step.querySelector('[data-type="transferVolume"]');
 
-        const finalVolume =
-            parseFloat(step.querySelector('[data-type="finalVolume"]').value);
+        const finalVolume = finalVolEl ? parseFloat(finalVolEl.value) : 0;
+        const transferVolume = transferVolEl ? parseFloat(transferVolEl.value) : 0;
 
-        if(index === 0){
-            //Step 1
-            const weight =
-                parseFloat(step.querySelector('[data-type="weight"]').value);
-
-            dilutionData.push({
-                weight: isNaN(weight) ? 0 : weight,
-                finalVolume: isNaN(finalVolume) ? 0 : finalVolume
-            });
-        }
-
-        else{
-            //Step 2+
-            const transferVolume =
-                parseFloat(step.querySelector('[data-type="transferVolume"]').value);
-            
-            dilutionData.push({
-                transferVolume: isNaN(transferVolume) ? 0 : transferVolume,
-                finalVolume: isNaN(finalVolume) ? 0 : finalVolume
-            });
-        }
-
+        dilutionData.push({
+            transferVolume: isNaN(transferVolume) ? 0 : transferVolume,
+            finalVolume: isNaN(finalVolume) ? 0 : finalVolume
+        });
     });
 
     return dilutionData;
-
 }
 
-function calculateDilutionFactor(dilutionData){
-
+function calculateDilutionFactor(dilutionData) {
     let dilutionFactor = 1;
-
-    // เริ่มคิดตั้งแต่ Step2
-    for(let i = 1; i < dilutionData.length; i++){
-
+    // ปรับลูปให้เริ่มคูณ Factor ตั้งแต่เจอสเตปที่มีการถ่ายสาร (Transfer)
+    for (let i = 0; i < dilutionData.length; i++) {
         const transfer = dilutionData[i].transferVolume;
         const finalVolume = dilutionData[i].finalVolume;
 
-        if(
-            transfer > 0 &&
-            finalVolume > 0
-        ){
-
-            dilutionFactor *= finalVolume / transfer;
-
+        if (transfer > 0 && finalVolume > 0) {
+            dilutionFactor *= (finalVolume / transfer);
         }
-
     }
-
     return dilutionFactor;
-
 }
 
-function syncSampleAmount(){
-
-    document.getElementById("step1Amount").value =
-        document.getElementById("sampleAmount").value;
-
-}
-
-
-function updateSampleInput(){
-
-    const percentType =
-        document.querySelector(
-            'input[name="percentType"]:checked'
-        );
-
-    const sampleLabel =
-        document.getElementById("sampleAmountLabel");
-
-    const sampleInput =
-        document.getElementById("sampleAmount");
-
-    const sampleUnit =
-        document.getElementById("sampleAmountUnit");
-
-    const stepLabel =
-        document.getElementById("step1Label");
-
-    const stepInput =
-        document.getElementById("step1Amount");
-
-    const stepUnit =
-        document.getElementById("step1Unit");
-
-    // -----------------------
-    // ยังไม่ได้เลือก Type
-    // -----------------------
-
-    if(!percentType){
-
-        sampleLabel.innerText = "Sample Weight";
-        sampleUnit.innerText = "";
-
-        sampleInput.placeholder =
-            "Select calculation type first";
-
-        sampleInput.disabled = true;
-
-        stepLabel.innerText = "Sample Weight";
-        stepUnit.innerText = "";
-
-        stepInput.placeholder =
-            "Auto";
-
-        return;
-
+function syncSampleAmount() {
+    const sampleAmountEl = document.getElementById("sampleAmount");
+    const step1AmountEl = document.getElementById("step1Amount");
+    if (sampleAmountEl && step1AmountEl) {
+        step1AmountEl.value = sampleAmountEl.value;
     }
+}
 
-    // เปิดให้กรอก
+function updateSampleInput() {
+    const percentType = document.querySelector('input[name="percentType"]:checked');
+    const sampleLabel = document.getElementById("sampleAmountLabel");
+    const sampleInput = document.getElementById("sampleAmount");
+    const sampleUnit = document.getElementById("sampleAmountUnit");
+    const stepLabel = document.getElementById("step1Label");
+    const stepInput = document.getElementById("step1Amount");
+    const stepUnit = document.getElementById("step1Unit");
+
+    if (!sampleInput) return;
+
+    if (!percentType) {
+        if (sampleLabel) sampleLabel.innerText = "Sample Weight";
+        if (sampleUnit) sampleUnit.innerText = "";
+        sampleInput.placeholder = "Select calculation type first";
+        sampleInput.disabled = true;
+        if (stepLabel) stepLabel.innerText = "Sample Weight";
+        if (stepUnit) stepUnit.innerText = "";
+        if (stepInput) stepInput.placeholder = "Auto";
+        return;
+    }
 
     sampleInput.disabled = false;
 
-    // -----------------------
-    // %(w/w)
-    // -----------------------
-
-    if(percentType.value === "ww"){
-
-        sampleLabel.innerText =
-            "Sample Weight";
-
-        sampleUnit.innerText =
-            "g";
-
-        sampleInput.placeholder =
-            "Enter sample weight";
-
-        stepLabel.innerText =
-            "Sample Weight";
-
-        stepUnit.innerText =
-            "g";
-
-        stepInput.placeholder =
-            "Auto";
-
+    if (percentType.value === "ww") {
+        if (sampleLabel) sampleLabel.innerText = "Sample Weight";
+        if (sampleUnit) sampleUnit.innerText = "g";
+        sampleInput.placeholder = "Enter sample weight";
+        if (stepLabel) stepLabel.innerText = "Sample Weight";
+        if (stepUnit) stepUnit.innerText = "g";
+    } else {
+        if (sampleLabel) sampleLabel.innerText = "Sample Volume";
+        if (sampleUnit) sampleUnit.innerText = "mL";
+        sampleInput.placeholder = "Enter sample volume";
+        if (stepLabel) stepLabel.innerText = "Sample Volume";
+        if (stepUnit) stepUnit.innerText = "mL";
     }
-
-    // -----------------------
-    // %(w/v)
-    // -----------------------
-
-    else{
-
-        sampleLabel.innerText =
-            "Sample Volume";
-
-        sampleUnit.innerText =
-            "mL";
-
-        sampleInput.placeholder =
-            "Enter sample volume";
-
-        stepLabel.innerText =
-            "Sample Volume";
-
-        stepUnit.innerText =
-            "mL";
-
-        stepInput.placeholder =
-            "Auto";
-
-    }
-
+    if (stepInput) stepInput.placeholder = "Auto";
 }
 
-
-window.addEventListener("DOMContentLoaded", ()=>{
-
-    document
-        .getElementById("sampleAmount")
-        .addEventListener("input", syncSampleAmount);
+window.addEventListener("DOMContentLoaded", () => {
+    const sampleAmountEl = document.getElementById("sampleAmount");
+    if (sampleAmountEl) {
+        sampleAmountEl.addEventListener("input", syncSampleAmount);
+    }
+    
+    // ผูก Event ให้กับวิทยุเปลี่ยนประเภท % เผื่อกดเปลี่ยนฟิลด์จะปรับตามอัตโนมัติ
+    const percentRadioEls = document.querySelectorAll('input[name="percentType"]');
+    percentRadioEls.forEach(radio => {
+        radio.addEventListener("change", updateSampleInput);
+    });
 
     updateSampleInput();
     syncSampleAmount();
-
 });
+
+// ฟังก์ชันแยกจัดการ Error Box แต่ละโซนไม่ให้โปรแกรมพัง
+function showCustomError(boxId, message) {
+    const errorBox = document.getElementById(boxId);
+    if (errorBox) {
+        errorBox.innerText = message;
+        errorBox.style.display = "block";
+    } else {
+        console.error("Error display missing:", message);
+    }
+}
