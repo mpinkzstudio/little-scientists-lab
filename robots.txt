@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mpinkzstudio.github.io/little-scientists-lab/sitemap.xml
