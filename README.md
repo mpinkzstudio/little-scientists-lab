@@ -5,7 +5,7 @@ A cute and free chemistry toolkit designed for students, educators, researchers,
 Little Scientist's Lab combines chemistry and web development to provide simple, reliable, and easy-to-use tools that make everyday laboratory calculations faster and more enjoyable.
 
 🌐 **Live Website:**  
-https://mpinkzstudio.github.io/little-scientists-lab/
+[Little Scientist's Lab](https://mpinkzstudio.github.io/little-scientists-lab/)
 
 ---
 
@@ -51,7 +51,7 @@ Future premium features will include:
 
 If you find Little Scientist's Lab useful, consider supporting future development:
 
-☕ https://ko-fi.com/mpinkzstudio
+☕ [Buy me a coffee](https://ko-fi.com/mpinkzstudio/tip)
 
 Every coffee helps support new features, improvements, and future chemistry tools.
 
@@ -63,7 +63,7 @@ Every coffee helps support new features, improvements, and future chemistry tool
 
 Email: mpinkz.studio@gmail.com
 
-X (Twitter): https://x.com/Mpinkz
+X (Twitter): [@Mpinkz](https://x.com/Mpinkz)
 
 ---
 
