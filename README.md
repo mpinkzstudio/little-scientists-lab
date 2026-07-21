@@ -4,8 +4,7 @@ A cute and free chemistry toolkit designed for students, educators, researchers,
 
 Little Scientist's Lab combines chemistry and web development to provide simple, reliable, and easy-to-use tools that make everyday laboratory calculations faster and more enjoyable.
 
-🌐 **Live Website:**  
-[Little Scientist's Lab](https://mpinkzstudio.github.io/little-scientists-lab/)
+🌐 **Website:**  🧪 [Little Scientist's Lab](https://mpinkzstudio.github.io/little-scientists-lab/)
 
 ---
 
