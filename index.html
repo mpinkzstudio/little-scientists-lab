@@ -15,16 +15,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧪 Little Scientist's Lab</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- import script -->
-    <script src="main.js"></script>
-    <script src="dilution.js"></script>
-    <script src="molarity.js"></script>
-    <script src="molecular-weight.js"></script>
-    <script src="solution-preparation.js"></script>
-    <script src="titration.js"></script>
-    <script src="unit-converter.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/solution-chemistry/dilution.js"></script>
+    <script src="js/solution-chemistry/molarity.js"></script>
+    <script src="js/solution-chemistry/molecular-weight.js"></script>
+    <script src="js/solution-chemistry/solution-preparation.js"></script>
+    <script src="js/chemistry-analysis/titration.js"></script>
+    <script src="js/laboratory-utilities/unit-converter.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +52,7 @@
             
             <!-- หมวดที่ 1: Solution Chemistry -->
             <div class="menu-category">
-                <div class="category-header">⚗️ Solution Chemistry</div>
+                <div class="category-header" onclick="toggleCategory(this)">⚗️ Solution Chemistry</div>
                 <div class="sub-menu-list">
                     <div id="dilution-nav" class="sub-menu-item" onclick="switchTab('dilution-tab', this)">
                         <span class="sub-menu-title">├ Dilution Calculator</span>
@@ -75,7 +75,7 @@
 
             <!-- หมวดที่ 2: Chemistry Analysis -->
             <div class="menu-category">
-                <div class="category-header">🔬 Chemistry Analysis</div>
+                <div class="category-header" onclick="toggleCategory(this)">🔬 Chemistry Analysis</div>
                 <div class="sub-menu-list">
                     <div id="titration-nav" class="sub-menu-item" onclick="switchTab('titration-tab', this)">
                         <span class="sub-menu-title">└ Strong Acid-Base Titration</span>
@@ -86,7 +86,7 @@
 
             <!-- หมวดที่ 3: Laboratory Utilities -->
             <div class="menu-category">
-                <div class="category-header">📐 Laboratory Utilities</div>
+                <div class="category-header" onclick="toggleCategory(this)">📐 Laboratory Utilities</div>
                 <div class="sub-menu-list">
                     <div id="converter-nav" class="sub-menu-item" onclick="switchTab('converter-tab', this)">
                         <span class="sub-menu-title">└ Scientific Unit Converter</span>
@@ -315,10 +315,10 @@
                     <!-- ปุ่มลัดสำหรับสารเคมีที่ใช้บ่อย -->
                     <div id="group-mol-quick" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: -6px;">
                         <span style="font-size: 12px; color: #6c757d; align-self: center;">Quick:</span>
-                        <button type="button" onclick="document.getElementById('mol-mw').value=58.44" style="padding: 4px 8px; font-size: 11px; border: 1px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Quicksand', sans-serif;">NaCl</button>
-                        <button type="button" onclick="document.getElementById('mol-mw').value=40.00" style="padding: 4px 8px; font-size: 11px; border: 1px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Quicksand', sans-serif;">NaOH</button>
-                        <button type="button" onclick="document.getElementById('mol-mw').value=36.46" style="padding: 4px 8px; font-size: 11px; border: 1px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Quicksand', sans-serif;">HCl</button>
-                        <button type="button" onclick="document.getElementById('mol-mw').value=180.16" style="padding: 4px 8px; font-size: 11px; border: 1px solid #e9ecef; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Quicksand', sans-serif;">Glucose</button>
+                        <button type="button" class="quick-chip" onclick="document.getElementById('mol-mw').value=58.44">NaCl</button>
+                        <button type="button" class="quick-chip" onclick="document.getElementById('mol-mw').value=40.00">NaOH</button>
+                        <button type="button" class="quick-chip" onclick="document.getElementById('mol-mw').value=36.46">HCl</button>
+                        <button type="button" class="quick-chip" onclick="document.getElementById('mol-mw').value=180.16">Glucose</button>
                     </div>
 
                     <!-- 2. Concentration (M) -> ซ่อนเมื่อเลือกหาค่า M -->

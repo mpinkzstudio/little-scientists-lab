@@ -119,7 +119,25 @@ body {
     color: var(--primary-dark);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 4px 6px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 36px; /* เผื่อพื้นที่แตะให้พอดีนิ้วบนมือถือ */
+}
+
+/* ลูกศรบอกสถานะเปิด/ปิด หมุนตาม class .expanded */
+.category-header::after {
+    content: "⌄";
+    font-size: 16px;
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+    margin-left: 8px;
+}
+
+.menu-category.expanded .category-header::after {
+    transform: rotate(180deg);
 }
 
 /* โซนซ่อนเมนูย่อยข้างใน */
@@ -133,20 +151,39 @@ body {
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* --- HOVER EFFECT: ชี้ที่หมวดใหญ่แล้วคลี่เมนูย่อยลงมา --- */
-.menu-category:hover {
+/* --- คลิก/แตะเพื่อเปิด-ปิดเมนูย่อย: ใช้ได้ทั้งเมาส์และจอสัมผัส --- */
+.menu-category.expanded {
     background-color: white;
     border-color: var(--accent);
-    transform: translateY(-2px);
     box-shadow: 0 5px 0px var(--accent);
 }
 
-.menu-category:hover .sub-menu-list {
+.menu-category.expanded .sub-menu-list {
     max-height: 300px; /* ขยายให้เห็นเมนูย่อย */
     opacity: 1;
     margin-top: 10px;
     padding-top: 8px;
     border-top: 1.5px dashed #f1f3f5;
+}
+
+/* --- HOVER EFFECT: เฉพาะอุปกรณ์ที่มี hover จริงๆ (เมาส์) เท่านั้น ---
+   จอสัมผัสไม่มี hover จริง การพึ่ง :hover อย่างเดียวทำให้ต้องแตะ 2 ครั้งกว่าจะเท่ากับคลิก
+   จึงห่อไว้ใน media query นี้ แล้วให้มือถือ/แท็บเล็ตใช้ class .expanded ที่คุมด้วย JS แทน */
+@media (hover: hover) and (pointer: fine) {
+    .menu-category:hover {
+        background-color: white;
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 0px var(--accent);
+    }
+
+    .menu-category:hover .sub-menu-list {
+        max-height: 300px;
+        opacity: 1;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1.5px dashed #f1f3f5;
+    }
 }
 
 /* --- SUB MENU ITEMS --- */
@@ -390,6 +427,8 @@ body {
     min-height: 48px;
     display: flex;
     align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .field-input:focus,
@@ -444,6 +483,27 @@ input[type="text"]:focus {
     outline: none;
 }
 
+/* ปุ่มลัด (Quick chip) เช่น NaCl / NaOH / HCl / Glucose ในหน้า Molarity
+   เดิมใช้ inline style padding 4px 8px ซึ่งเล็กเกินไปสำหรับการแตะบนมือถือ */
+.quick-chip {
+    padding: 8px 14px;
+    min-height: 36px;
+    font-size: 13px;
+    border: 1.5px solid #e9ecef;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    color: var(--primary-dark);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.quick-chip:active {
+    background-color: var(--accent-light);
+    border-color: var(--accent);
+}
+
 .calc-btn {
     width: 100%;
     padding: 14px;
@@ -491,6 +551,8 @@ input[type="text"]:focus {
     font-family: 'Fredoka', sans-serif;
     font-weight: 600;
     color: var(--primary);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .unit {
@@ -574,6 +636,18 @@ input[type="text"]:focus {
 
     .tools-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* จอสัมผัสไม่มี hover จริง จึงแสดงคำอธิบายเมนูย่อยไว้ตลอดแทนการซ่อนรอ hover
+       และขยายพื้นที่แตะของแต่ละรายการเมนูให้กดง่ายขึ้น */
+    .sub-menu-item {
+        padding: 10px 8px;
+    }
+
+    .sub-menu-desc {
+        max-height: 20px;
+        opacity: 1;
+        margin-top: 2px;
     }
 }
 
