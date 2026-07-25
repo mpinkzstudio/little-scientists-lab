@@ -21,8 +21,8 @@ function toggleSolPrepInputs() {
     else if (mode === 'ppmSolid' || mode === 'ppmStock') unitLabel.innerText = 'ppm';
 }
 
-// เรียกดีฟอลต์ให้สลับช่องถูกเมื่อรีโหลด
-setTimeout(toggleSolPrepInputs, 150);
+// เรียกดีฟอลต์ให้สลับช่องถูกเมื่อรีโหลด (รอ DOM พร้อมก่อน)
+document.addEventListener("DOMContentLoaded", toggleSolPrepInputs);
 
 // --- ฟังก์ชันหลักในการคำนวณการเตรียมสารละลาย ---
 function calculateSolutionPrep() {

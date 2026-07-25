@@ -15,16 +15,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧪 Little Scientist's Lab</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- import script -->
-    <script src="main.js"></script>
-    <script src="dilution.js"></script>
-    <script src="molarity.js"></script>
-    <script src="molecular-weight.js"></script>
-    <script src="solution-preparation.js"></script>
-    <script src="titration.js"></script>
-    <script src="unit-converter.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/solution-chemistry/dilution.js"></script>
+    <script src="js/solution-chemistry/molarity.js"></script>
+    <script src="js/solution-chemistry/molecular-weight.js"></script>
+    <script src="js/solution-chemistry/solution-preparation.js"></script>
+    <script src="js/chemistry-analysis/titration.js"></script>
+    <script src="js/laboratory-utilities/unit-converter.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,12 +97,12 @@
 
         </div>
 
-        <footer style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; text-align: center; padding: 12px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); border-top: 1.5px solid #e9ecef; color: #adb5bd; font-size: 12px; font-family: 'Quicksand', sans-serif;">
+        <footer class="site-footer">
             <span>© 2026 Mpinkz Studio. Built with 💖 for Chemistry Students</span>
             <span style="margin: 0 10px; color: #dee2e6;">|</span>
-            <span style="color: var(--primary);">Contact: mpinkz.studio@gmail.com</span>
+            <span>Contact: <a href="mailto:your_email@example.com" style="color: var(--primary); text-decoration: none; font-weight: 700;">mpinkz.studio@gmail.com</a></span>
             <span style="margin: 0 10px; color: #dee2e6;">|</span>
-            <a href="https://ko-fi.com/mpinkzstudio/tip" style="color: #fab005; text-decoration: none; font-weight: 700;">☕ Buy me a coffee</a>
+            <a href="https://mpinkzstudio.gumroad.com/l/support-mpinkz" style="color: #fab005; text-decoration: none; font-weight: 700;">☕ Support Mpinkz Studio</a>
         </footer>
 
     </div>
@@ -186,7 +186,7 @@
                 <!-- เลือกว่าจะหาค่าอะไร -->
                 <div class="input-group">
                     <label for="dilutionTarget">What do you want to calculate?</label>
-                    <select id="dilutionTarget" onchange="toggleDilutionInputs()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                    <select id="dilutionTarget" onchange="toggleDilutionInputs()" class="field-select-highlight">
                         <option value="V1">Find Initial Volume (V1)</option>
                         <option value="C1">Find Initial Concentration (C1)</option>
                         <option value="V2">Find Final Volume (V2)</option>
@@ -202,10 +202,10 @@
                     <div id="group-C1" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="input-C1">Initial Concentration (C1)</label>
-                            <input type="number" id="input-C1" placeholder="e.g., 1.5" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="input-C1" placeholder="e.g., 1.5" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="unit-C1" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="unit-C1" class="field-select">
                                 <option value="1">M</option>
                                 <option value="1e-3">mM</option>
                                 <option value="1e-6">µM</option>
@@ -217,10 +217,10 @@
                     <div id="group-V1" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="input-V1">Initial Volume (V1)</label>
-                            <input type="number" id="input-V1" placeholder="e.g., 10" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="input-V1" placeholder="e.g., 10" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="unit-V1" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="unit-V1" class="field-select">
                                 <option value="1">L</option>
                                 <option value="1e-3" selected>mL</option>
                                 <option value="1e-6">µL</option>
@@ -232,10 +232,10 @@
                     <div id="group-C2" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="input-C2">Final Concentration (C2)</label>
-                            <input type="number" id="input-C2" placeholder="e.g., 0.5" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="input-C2" placeholder="e.g., 0.5" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="unit-C2" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="unit-C2" class="field-select">
                                 <option value="1">M</option>
                                 <option value="1e-3">mM</option>
                                 <option value="1e-6">µM</option>
@@ -247,10 +247,10 @@
                     <div id="group-V2" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="input-V2">Final Volume (V2)</label>
-                            <input type="number" id="input-V2" placeholder="e.g., 30" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="input-V2" placeholder="e.g., 30" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="unit-V2" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="unit-V2" class="field-select">
                                 <option value="1">L</option>
                                 <option value="1e-3" selected>mL</option>
                                 <option value="1e-6">µL</option>
@@ -289,7 +289,7 @@
                 <!-- เลือกว่าจะหาค่าอะไร (ล้อตามแพทเทิร์น Dilution) -->
                 <div class="input-group">
                     <label for="molarityTarget">What do you want to calculate?</label>
-                    <select id="molarityTarget" onchange="toggleMolarityInputs()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                    <select id="molarityTarget" onchange="toggleMolarityInputs()" class="field-select-highlight">
                         <option value="M">Find Concentration (Molarity, M)</option>
                         <option value="mass">Find Mass of Solute (g)</option>
                         <option value="vol">Find Solution Volume (L/mL)</option>
@@ -305,10 +305,10 @@
                     <div id="group-mol-mw" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="mol-mw">Molecular Weight</label>
-                            <input type="number" id="mol-mw" placeholder="e.g., 58.44" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="mol-mw" placeholder="e.g., 58.44" step="any" class="field-input">
                         </div>
                         <div>
-                            <div style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: #495057; text-align: center; box-sizing: border-box;">g/mol</div>
+                            <div class="field-static">g/mol</div>
                         </div>
                     </div>
                     
@@ -325,10 +325,10 @@
                     <div id="group-mol-conc" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="input-mol-conc">Concentration (Molarity)</label>
-                            <input type="number" id="input-mol-conc" placeholder="e.g., 0.1" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="input-mol-conc" placeholder="e.g., 0.1" step="any" class="field-input">
                         </div>
                         <div>
-                            <div style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: #495057; text-align: center; box-sizing: border-box;">M</div>
+                            <div class="field-static">M</div>
                         </div>
                     </div>
 
@@ -336,10 +336,10 @@
                     <div id="group-mol-mass" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="mol-mass">Mass of Solute</label>
-                            <input type="number" id="mol-mass" placeholder="e.g., 5.85" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="mol-mass" placeholder="e.g., 5.85" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="mol-mass-unit" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="mol-mass-unit" class="field-select">
                                 <option value="1" selected>g</option>
                                 <option value="0.001">mg</option>
                             </select>
@@ -350,10 +350,10 @@
                     <div id="group-mol-vol" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="mol-vol">Solution Volume</label>
-                            <input type="number" id="mol-vol" placeholder="e.g., 500" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="mol-vol" placeholder="e.g., 500" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="mol-vol-unit" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="mol-vol-unit" class="field-select">
                                 <option value="1">L</option>
                                 <option value="0.001" selected>mL</option>
                             </select>
@@ -398,6 +398,7 @@
                     <span id="resultValue" class="result-value">0.000</span> <span class="unit">g/mol</span>
                 </div>
                 <div id="errorBox" class="error-box"></div>
+                <div id="mwWarningBox" class="warning-box"></div>
             </div>
         </div>
 
@@ -410,7 +411,7 @@
                 <!-- เลือกว่าต้องการเตรียมแบบไหน -->
                 <div class="input-group">
                     <label for="solPrepMode">Preparation Type</label>
-                    <select id="solPrepMode" onchange="toggleSolPrepInputs()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                    <select id="solPrepMode" onchange="toggleSolPrepInputs()" class="field-select-highlight">
                         <option value="wv" selected>Percentage (% w/v) - Solid Solute</option>
                         <option value="vv">Percentage (% v/v) - Liquid Solute</option>
                         <option value="ppmSolid">ppm (Parts Per Million) - From Solid</option>
@@ -427,10 +428,10 @@
                     <div id="group-sol-conc" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="sol-conc" id="label-sol-conc">Desired Concentration</label>
-                            <input type="number" id="sol-conc" placeholder="e.g., 5" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="sol-conc" placeholder="e.g., 5" step="any" class="field-input">
                         </div>
                         <div>
-                            <div id="unit-sol-conc" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: #495057; text-align: center; box-sizing: border-box;">% w/v</div>
+                            <div id="unit-sol-conc" class="field-static">% w/v</div>
                         </div>
                     </div>
 
@@ -438,10 +439,10 @@
                     <div id="group-sol-stock" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end; display: none;">
                         <div>
                             <label for="sol-stock-conc">Stock Concentration</label>
-                            <input type="number" id="sol-stock-conc" placeholder="e.g., 1000" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="sol-stock-conc" placeholder="e.g., 1000" step="any" class="field-input">
                         </div>
                         <div>
-                            <div style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: #495057; text-align: center; box-sizing: border-box;">ppm</div>
+                            <div class="field-static">ppm</div>
                         </div>
                     </div>
 
@@ -449,10 +450,10 @@
                     <div id="group-sol-vol" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px; align-items: end;">
                         <div>
                             <label for="sol-vol">Total Solution Volume</label>
-                            <input type="number" id="sol-vol" placeholder="e.g., 250" step="any" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="sol-vol" placeholder="e.g., 250" step="any" class="field-input">
                         </div>
                         <div>
-                            <select id="sol-vol-unit" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="sol-vol-unit" class="field-select">
                                 <option value="0.001" selected>mL</option>
                                 <option value="1">L</option>
                             </select>
@@ -491,7 +492,7 @@
                         <!-- Select Analyte -->
                         <div class="input-group">
                             <label>Select Analyte</label>
-                            <select id="analyteSelect" onchange="updateAcidData()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                            <select id="analyteSelect" onchange="updateAcidData()" class="field-select-highlight">
                                 <option value="">Choose Strong Acid</option>
                                 <option value="HCl">Hydrochloric Acid (HCl)</option>
                                 <option value="HNO3">Nitric Acid (HNO₃)</option>
@@ -662,7 +663,7 @@
                 <!-- เลือกว่าต้องการแปลงหน่วยหมวดหมู่ไหน -->
                 <div class="input-group">
                     <label for="convCategory">Measurement Category</label>
-                    <select id="convCategory" onchange="updateConverterUnits()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: var(--primary-dark);">
+                    <select id="convCategory" onchange="updateConverterUnits()" class="field-select-highlight">
                         <option value="concentration" selected>Concentration (M, mM, &mu;M)</option>
                         <option value="volume">Volume (L, mL, &mu;L)</option>
                         <option value="mass">Mass (g, mg, &mu;g)</option>
@@ -679,10 +680,10 @@
                     <div style="display: grid; grid-template-columns: 1fr 120px; gap: 10px; align-items: end;">
                         <div>
                             <label for="convInput">From Value</label>
-                            <input type="number" id="convInput" placeholder="Enter value" step="any" oninput="calculateConversion()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; box-sizing: border-box;">
+                            <input type="number" id="convInput" placeholder="Enter value" step="any" oninput="calculateConversion()" class="field-input">
                         </div>
                         <div>
-                            <select id="convFromUnit" onchange="calculateConversion()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="convFromUnit" onchange="calculateConversion()" class="field-select">
                                 <!-- ตัวเลือกหน่วยจะถูกเปลี่ยนแบบไดนามิกด้วย JS -->
                             </select>
                         </div>
@@ -697,10 +698,10 @@
                     <div style="display: grid; grid-template-columns: 1fr 120px; gap: 10px; align-items: end;">
                         <div>
                             <label>To Result</label>
-                            <div id="convOutputDisplay" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700; background-color: #f8f9fa; color: #495057; box-sizing: border-box; min-height: 48px; display: flex; align-items: center;">0.00</div>
+                            <div id="convOutputDisplay" class="field-static field-static-flex">0.00</div>
                         </div>
                         <div>
-                            <select id="convToUnit" onchange="calculateConversion()" style="width: 100%; padding: 12px; border: 2.5px solid #e9ecef; border-radius: 16px; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+                            <select id="convToUnit" onchange="calculateConversion()" class="field-select">
                                 <!-- ตัวเลือกหน่วยจะถูกเปลี่ยนแบบไดนามิกด้วย JS -->
                             </select>
                         </div>
@@ -720,6 +721,4 @@
     </div>
 </body>
     
-<!-- Workspace End -->    
-
-
+<!-- Workspace End -->

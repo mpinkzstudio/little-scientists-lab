@@ -58,6 +58,12 @@ function calculateDilution() {
     if (target !== 'C2' && isNaN(C2_raw)) return showDilutionError("Please enter Final Concentration (C2) 💕");
     if (target !== 'V2' && isNaN(V2_raw)) return showDilutionError("Please enter Final Volume (V2) 💕");
 
+    // ตรวจสอบว่าค่าที่กรอก (ไม่ใช่ target) ต้องมากกว่า 0 เพื่อป้องกันค่าลบ/ศูนย์ทำให้ผลลัพธ์ผิดพลาดแบบไม่รู้ตัว
+    if (target !== 'C1' && C1_raw <= 0) return showDilutionError("Initial Concentration (C1) must be greater than zero 💕");
+    if (target !== 'V1' && V1_raw <= 0) return showDilutionError("Initial Volume (V1) must be greater than zero 💕");
+    if (target !== 'C2' && C2_raw <= 0) return showDilutionError("Final Concentration (C2) must be greater than zero 💕");
+    if (target !== 'V2' && V2_raw <= 0) return showDilutionError("Final Volume (V2) must be greater than zero 💕");
+
     // แปลงค่าที่กรอกให้เป็นค่าในหน่วยมาตรฐานสากล (M และ L) เพื่อคำนวณความถูกต้อง
     let C1 = C1_raw * unitC1;
     let V1 = V1_raw * unitV1;

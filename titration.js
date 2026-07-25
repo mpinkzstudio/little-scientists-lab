@@ -62,6 +62,11 @@ function calculateTitration() {
         return;
     }
 
+    if (C1Input <= 0 || V1Input <= 0 || V2Input <= 0) {
+        showCustomError("titrationErrorBox", "Concentration and volume values must be greater than zero.");
+        return;
+    }
+
     // Convert concentration to M
     let C1 = C1Input;
     if (C1Unit === "mM") C1 = C1Input / 1000;

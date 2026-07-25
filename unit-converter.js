@@ -115,8 +115,12 @@ function calculateConversion() {
             result = value;
             stepsHTML = `Same unit selected: <strong>${fmt(result)} ${fromUnit === 'C' ? '°C' : 'K'}</strong>`;
         } else if (fromUnit === 'C' && toUnit === 'K') {
-            result = value + 271.15; // อิงตามหลักวิชาการทั่วไป 273.15
-            // เพื่อป้องกันเลขบั๊ก แก้เป็น 273.15 ตามมาตรฐานสากล
+            if (value < -273.15) {
+                errorBox.innerText = "Temperature in Celsius cannot be below Absolute Zero (-273.15 °C).";
+                errorBox.style.display = 'block';
+                outputDisplay.innerText = "Invalid";
+                return;
+            }
             result = value + 273.15;
             stepsHTML = `Formula: K = °C + 273.15<br>&bull; ${value} °C + 273.15 = <strong>${fmt(result)} K</strong>`;
         } else if (fromUnit === 'K' && toUnit === 'C') {

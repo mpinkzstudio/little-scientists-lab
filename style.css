@@ -356,6 +356,51 @@ body {
 }
 
 /* --- CALCULATOR CARD STYLES --- */
+/* --- SHARED FIELD STYLES (ใช้แทน inline style ที่เคยซ้ำกันในหลายจุดของ index.html) --- */
+.field-input,
+.field-select,
+.field-select-highlight,
+.field-static {
+    width: 100%;
+    padding: 12px;
+    border: 2.5px solid #e9ecef;
+    border-radius: 16px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+}
+
+.field-input {
+    box-sizing: border-box;
+}
+
+.field-select-highlight {
+    background-color: #f8f9fa;
+    color: var(--primary-dark);
+}
+
+.field-static {
+    background-color: #f8f9fa;
+    color: #495057;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.field-static-flex {
+    text-align: left;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.field-input:focus,
+.field-select:focus,
+.field-select-highlight:focus {
+    border-color: var(--accent);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(221, 161, 94, 0.15);
+    outline: none;
+}
+
 .card h3 {
     font-family: 'Fredoka', sans-serif;
     color: var(--primary-dark);
@@ -467,12 +512,81 @@ input[type="text"]:focus {
     text-align: center;
 }
 
-.welcome-card {
+/* กล่องเตือนสำหรับสูตรเคมีที่ตรวจสอบแล้วไม่น่าจะมีอยู่จริง (ไม่ใช่ error ที่บล็อกผลลัพธ์ ใช้โทนอำพันแยกจาก error สีแดง) */
+.warning-box {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #fff8e6;
+    border: 2px solid #ffe1a8;
+    border-radius: 16px;
+    color: #a9750c;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+    display: none;
     text-align: center;
 }
-.welcome-icon {
-    font-size: 50px;
-    margin-bottom: 10px;
+
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    text-align: center;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border-top: 1.5px solid #e9ecef;
+    color: #adb5bd;
+    font-size: 12px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+/* --- RESPONSIVE: จอเล็ก/แท็บเล็ต/มือถือ --- */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+        height: auto;
+        overflow: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 50vh;
+        border-right: none;
+        border-bottom: 3px solid var(--accent);
+        box-sizing: border-box;
+        padding-bottom: 70px; /* กันไม่ให้ footer ที่ fixed อยู่ทับเมนูส่วนล่าง */
+    }
+
+    .workspace {
+        padding: 20px;
+        padding-bottom: 60px; /* กันไม่ให้ footer ที่ fixed อยู่ทับเนื้อหาส่วนล่าง */
+    }
+
+    .site-footer {
+        font-size: 11px;
+        padding: 8px;
+        line-height: 1.6;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-footer span[style*="margin"] {
+        display: none; /* ซ่อนตัวคั่น | บนจอแคบมากเพื่อไม่ให้ล้นบรรทัด */
+    }
+
+    .site-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
 }
 
 @keyframes popIn {
@@ -543,4 +657,3 @@ input[type="text"]:focus {
         padding:20px;
     }
 }
-

@@ -21,8 +21,8 @@ function toggleMolarityInputs() {
     document.getElementById('molarityErrorBox').style.display = 'none';
 }
 
-// เรียกให้เปิดฟังก์ชันสลับช่องครั้งแรกเพื่อให้ซ่อนช่องหา M ไว้ตามดีฟอลต์
-setTimeout(toggleMolarityInputs, 100);
+// เรียกให้เปิดฟังก์ชันสลับช่องครั้งแรกเพื่อให้ซ่อนช่องหา M ไว้ตามดีฟอลต์ (รอ DOM พร้อมก่อน)
+document.addEventListener("DOMContentLoaded", toggleMolarityInputs);
 
 // --- ฟังก์ชันสำหรับการคำนวณ Molarity แบบครอบคลุมย้อนกลับทุกมิติ ---
 function calculateMolarity() {
