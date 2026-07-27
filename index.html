@@ -14,17 +14,22 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧪 Little Scientist's Lab</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Free online chemistry calculators for students: dilution, molarity, molecular weight, solution preparation, titration, pH, significant figures, scientific notation, and unit conversion.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+    <title>Little Scientist's Lab</title>
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- import script -->
-    <script src="main.js"></script>
-    <script src="dilution.js"></script>
-    <script src="molarity.js"></script>
-    <script src="molecular-weight.js"></script>
-    <script src="solution-preparation.js"></script>
-    <script src="titration.js"></script>
-    <script src="unit-converter.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/solution-chemistry/dilution.js"></script>
+    <script src="js/solution-chemistry/molarity.js"></script>
+    <script src="js/solution-chemistry/molecular-weight.js"></script>
+    <script src="js/solution-chemistry/solution-preparation.js"></script>
+    <script src="js/chemistry-analysis/titration.js"></script>
+    <script src="js/chemistry-analysis/ph-calculator.js"></script>
+    <script src="js/laboratory-utilities/unit-converter.js"></script>
+    <script src="js/laboratory-utilities/sig-figs.js"></script>
+    <script src="js/laboratory-utilities/scientific-notation.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,8 +83,12 @@
                 <div class="category-header" onclick="toggleCategory(this)">🔬 Chemistry Analysis</div>
                 <div class="sub-menu-list">
                     <div id="titration-nav" class="sub-menu-item" onclick="switchTab('titration-tab', this)">
-                        <span class="sub-menu-title">└ Strong Acid-Base Titration</span>
+                        <span class="sub-menu-title">├ Strong Acid-Base Titration</span>
                         <span class="sub-menu-desc">Explore acid-base titration</span>
+                    </div>
+                    <div id="ph-nav" class="sub-menu-item" onclick="switchTab('ph-tab', this)">
+                        <span class="sub-menu-title">└ pH Calculator (Basic)</span>
+                        <span class="sub-menu-desc">Find pH, pOH, [H⁺] & [OH⁻]</span>
                     </div>
                 </div>
             </div>
@@ -89,8 +98,16 @@
                 <div class="category-header" onclick="toggleCategory(this)">📐 Laboratory Utilities</div>
                 <div class="sub-menu-list">
                     <div id="converter-nav" class="sub-menu-item" onclick="switchTab('converter-tab', this)">
-                        <span class="sub-menu-title">└ Scientific Unit Converter</span>
+                        <span class="sub-menu-title">├ Scientific Unit Converter</span>
                         <span class="sub-menu-desc">Convert common laboratory units</span>
+                    </div>
+                    <div id="sigfigs-nav" class="sub-menu-item" onclick="switchTab('sigfigs-tab', this)">
+                        <span class="sub-menu-title">├ Significant Figures Calculator</span>
+                        <span class="sub-menu-desc">Count or round to sig figs</span>
+                    </div>
+                    <div id="scinot-nav" class="sub-menu-item" onclick="switchTab('scinot-tab', this)">
+                        <span class="sub-menu-title">└ Scientific Notation Converter</span>
+                        <span class="sub-menu-desc">Convert & calculate with sig fig rules</span>
                     </div>
                 </div>
             </div>
@@ -149,10 +166,25 @@
                     <span class="tool-card-title">🩷 Strong Acid-Base Titration Calculator</span>
                     <span class="tool-card-desc">Explore acid-base titration calculations</span>
                 </div>
+                <!-- การ์ด pH Calculator -->
+                <div class="tool-card" onclick="navigateToTool('ph-tab', 'ph-nav')">
+                    <span class="tool-card-title">🩷 pH Calculator (Basic)</span>
+                    <span class="tool-card-desc">Find pH, pOH, [H⁺] & [OH⁻]</span>
+                </div>
                 <!-- การ์ด Unit Converter -->
                 <div class="tool-card" onclick="navigateToTool('converter-tab', 'converter-nav')">
                     <span class="tool-card-title">🩷 Scientific Unit Converter</span>
                     <span class="tool-card-desc">Convert common laboratory units</span>
+                </div>
+                <!-- การ์ด Significant Figures -->
+                <div class="tool-card" onclick="navigateToTool('sigfigs-tab', 'sigfigs-nav')">
+                    <span class="tool-card-title">🩷 Significant Figures Calculator</span>
+                    <span class="tool-card-desc">Count or round to sig figs</span>
+                </div>
+                <!-- การ์ด Scientific Notation Converter -->
+                <div class="tool-card" onclick="navigateToTool('scinot-tab', 'scinot-nav')">
+                    <span class="tool-card-title">🩷 Scientific Notation Converter</span>
+                    <span class="tool-card-desc">Convert & calculate with sig fig rules</span>
                 </div>
             </div>
 
@@ -161,7 +193,7 @@
                 <div class="info-card">
                     <h3 class="section-title" style="margin-top:0;">🔬 Lab Overview</h3>
                     <ul class="info-list">
-                        <li><strong>6 Free Tools Available:</strong> Complete suite for basic laboratory math.</li>
+                        <li><strong>9 Free Tools Available:</strong> Complete suite for basic laboratory math.</li>
                         <li><strong>Chemistry Calculators:</strong> Solutions, dilutions, and concentration setups.</li>
                         <li><strong>Laboratory Utilities:</strong> Quick scientific metric unit converters.</li>
                     </ul>
@@ -262,13 +294,13 @@
                 <button class="calc-btn" onclick="calculateDilution()" style="margin-top: 25px;">Calculate ✨</button>
                 
                 <!-- กล่องแสดงผลลัพธ์และขั้นตอนวิธีคิด -->
-                <div id="dilutionResultBox" class="result-box" style="text-align: left; padding: 20px;">
+                <div id="dilutionResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px;">
                     <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Formula: C₁V₁ = C₂V₂</div>                    <div id="dilutionSteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: var(--primary);">Result:</div>
                     <div id="dilutionResultValue" class="result-value" style="font-size: 28px; text-align: center; margin: 5px 0;">0.00</div>
                 </div>
                 
-                <div id="dilutionErrorBox" class="error-box"></div>
+                <div id="dilutionErrorBox" class="error-box" aria-live="polite"></div>
 
                 <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
                 <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
@@ -364,14 +396,14 @@
                 <button class="calc-btn" onclick="calculateMolarity()" style="margin-top: 25px;">Calculate ✨</button>
                 
                 <!-- กล่องแสดงผลลัพธ์และขั้นตอนวิธีคิด -->
-                <div id="molarityResultBox" class="result-box" style="text-align: left; padding: 20px; display: none;">
+                <div id="molarityResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px; display: none;">
                     <div id="molarityFormulaTitle" style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Formula: M = mol / L</div>
                     <div id="molaritySteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: var(--primary);">Result:</div>
                     <div id="molarityResultValue" class="result-value" style="font-size: 28px; text-align: center; margin: 5px 0;">0.000</div>
                 </div>
                 
-                <div id="molarityErrorBox" class="error-box" style="display: none;"></div>
+                <div id="molarityErrorBox" class="error-box" aria-live="polite" style="display: none;"></div>
 
                 <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
                 <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
@@ -393,11 +425,11 @@
                     <input type="text" id="formulaInput" placeholder="e.g., H2O, MgSO4, NaCl">
                 </div>
                 <button class="calc-btn" onclick="calculateWeight()">Calculate ✨</button>
-                <div id="resultBox" class="result-box">
+                <div id="resultBox" class="result-box" aria-live="polite">
                     <label>Molecular Weight</label>
                     <span id="resultValue" class="result-value">0.000</span> <span class="unit">g/mol</span>
                 </div>
-                <div id="errorBox" class="error-box"></div>
+                <div id="errorBox" class="error-box" aria-live="polite"></div>
                 <div id="mwWarningBox" class="warning-box"></div>
             </div>
         </div>
@@ -464,14 +496,14 @@
                 <button class="calc-btn" onclick="calculateSolutionPrep()" style="margin-top: 25px;">Calculate ✨</button>
                 
                 <!-- กล่องแสดงผลลัพธ์และขั้นตอนวิธีทำแล็บ -->
-                <div id="solPrepResultBox" class="result-box" style="text-align: left; padding: 20px; display: none;">
+                <div id="solPrepResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px; display: none;">
                     <div id="solPrepFormulaTitle" style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Preparation Guide</div>
                     <div id="solPrepSteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: var(--primary);">Amount to Measure:</div>
                     <div id="solPrepResultValue" class="result-value" style="font-size: 28px; text-align: center; margin: 5px 0;">0.000</div>
                 </div>
                 
-                <div id="solPrepErrorBox" class="error-box" style="display: none;"></div>
+                <div id="solPrepErrorBox" class="error-box" aria-live="polite" style="display: none;"></div>
             </div>
         </div>
 
@@ -540,10 +572,10 @@
                         
                         <button id="calculateTitrationBtn" class="calc-btn" onclick="calculateTitration()">Calculate ✨</button>
 
-                        <div id="titrationErrorBox" class="error-box" style="display:none;"></div>
+                        <div id="titrationErrorBox" class="error-box" aria-live="polite" style="display:none;"></div>
 
                         <!-- Titration Result -->
-                        <div id="titrationResultBox" class="result-box" style="text-align:left; padding:20px;">
+                        <div id="titrationResultBox" class="result-box" aria-live="polite" style="text-align:left; padding:20px;">
                             <div style="font-weight:700; color:var(--primary-dark); margin-bottom:8px;">📝 Formula: C₁V₁ = C₂V₂</div>
                             <div id="titrationSteps" style="font-size:13px; color:#495057; line-height:1.6;"></div>
                             <div style="font-size:14px; font-weight:700; color:var(--primary); margin-top:12px;">Sample Concentration (C₂)</div>
@@ -624,10 +656,10 @@
 
                         <button id="calculateAnalysisBtn" class="calc-btn" onclick="calculateAnalysis()">Calculate ✨</button>
 
-                        <div id="analysisErrorBox" class="error-box" style="display:none;"></div>
+                        <div id="analysisErrorBox" class="error-box" aria-live="polite" style="display:none;"></div>
 
                         <!-- Analysis Result -->
-                        <div id="analysisResultBox" class="result-box" style="text-align:left; padding:20px;">
+                        <div id="analysisResultBox" class="result-box" aria-live="polite" style="text-align:left; padding:20px;">
                             <div style="font-size:14px; font-weight:700; color:var(--primary);">
                                 Result:
                             </div>
@@ -655,7 +687,78 @@
             </div>
         </div>
 
-        <!-- แท็บ 6: Scientific Unit Converter -->
+        <!-- แท็บ 6: pH Calculator (Basic) -->
+        <div id="ph-tab" class="tab-content">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h3>pH Calculator (Basic)</h3>
+
+                <!-- เลือกว่าจะคำนวณจากค่าอะไร -->
+                <div class="input-group">
+                    <label for="phMode">What do you want to calculate from?</label>
+                    <select id="phMode" onchange="togglePhInputs()" class="field-select-highlight">
+                        <option value="hConc">[H⁺] Concentration (Strong Monoprotic Acid)</option>
+                        <option value="ohConc">[OH⁻] Concentration (Strong Monohydroxide Base)</option>
+                        <option value="pHValue">pH Value</option>
+                        <option value="pOHValue">pOH Value</option>
+                    </select>
+                </div>
+
+                <hr style="border: 1px dashed var(--accent); margin: 20px 0;">
+
+                <div class="input-group" style="margin-bottom:0;">
+                    <label for="phInputValue" id="phInputLabel">Concentration [H⁺] (or Strong Monoprotic Acid, e.g. HCl)</label>
+                    <div id="phInputWrapper" style="display: grid; grid-template-columns: 1fr 100px; gap: 10px;">
+                        <input type="number" id="phInputValue" placeholder="e.g., 0.001" step="any" class="field-input">
+                        <select id="phInputUnit" class="field-select">
+                            <option value="1">M</option>
+                            <option value="1e-3">mM</option>
+                            <option value="1e-6">µM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="calc-btn" onclick="calculatePh()" style="margin-top: 25px;">Calculate ✨</button>
+
+                <!-- กล่องแสดงผลลัพธ์ -->
+                <div id="phResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px;">
+                    <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Formula: pH = -log[H⁺], pOH = -log[OH⁻], pH + pOH = 14</div>
+                    <div id="phSteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--primary);">pH</div>
+                            <div id="phResultPH" class="result-value" style="font-size: 26px;">0.00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--primary);">pOH</div>
+                            <div id="phResultPOH" class="result-value" style="font-size: 26px;">0.00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; font-weight: 700; color: var(--primary);">[H⁺]</div>
+                            <div id="phResultH" class="result-value" style="font-size: 15px;">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; font-weight: 700; color: var(--primary);">[OH⁻]</div>
+                            <div id="phResultOH" class="result-value" style="font-size: 15px;">0</div>
+                        </div>
+                    </div>
+
+                    <div id="phNatureNote" style="text-align: center; margin-top: 12px; font-size: 14px; font-weight: 700;"></div>
+                </div>
+
+                <div id="phErrorBox" class="error-box" aria-live="polite"></div>
+
+                <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
+                <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
+                    <h4 style="margin: 0 0 6px 0; font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 15px;">💡 How it works</h4>
+                    <p style="margin: 0; font-size: 12.5px; color: #495057; line-height: 1.5; font-weight: 500;">
+                        This calculator assumes a temperature of 25°C (K<sub>w</sub> = 1.0 &times; 10<sup>-14</sup>). For [H⁺]/[OH⁻] concentration modes, it also assumes complete 1:1 dissociation (e.g., HCl → H⁺, NaOH → OH⁻) — so this is the same calculation whether you're entering an ion concentration directly or a strong acid/base concentration. It does not account for weak acids/bases (Ka/Kb) or polyprotic species.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- แท็บ 7: Scientific Unit Converter -->
         <div id="converter-tab" class="tab-content">
             <div class="card" style="max-width: 500px; margin: 0 auto;">
                 <h3>Scientific Unit Converter</h3>
@@ -709,12 +812,147 @@
                 </div>
                 
                 <!-- กล่องแสดงวิธีคิดและสูตรแบบเข้าใจง่าย -->
-                <div id="converterResultBox" class="result-box" style="text-align: left; padding: 20px; margin-top: 25px; display: none;">
+                <div id="converterResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px; margin-top: 25px; display: none;">
                     <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">🩷 Conversion Guide</div>
                     <div id="converterSteps" style="font-size: 13px; color: #495057; line-height: 1.6; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px; margin-bottom: 0;"></div>
                 </div>
 
-                <div id="converterErrorBox" class="error-box" style="display: none; margin-top: 25px;"></div>
+                <div id="converterErrorBox" class="error-box" aria-live="polite" style="display: none; margin-top: 25px;"></div>
+            </div>
+        </div>
+
+        <!-- แท็บ 8: Significant Figures Calculator -->
+        <div id="sigfigs-tab" class="tab-content">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h3>Significant Figures Calculator</h3>
+
+                <!-- เลือกว่าต้องการนับ หรือ ปัดตัวเลข -->
+                <div class="input-group">
+                    <label for="sigfigMode">What do you want to do?</label>
+                    <select id="sigfigMode" onchange="toggleSigFigInputs()" class="field-select-highlight">
+                        <option value="count">Count Significant Figures</option>
+                        <option value="round">Round to N Significant Figures</option>
+                    </select>
+                </div>
+
+                <hr style="border: 1px dashed var(--accent); margin: 20px 0;">
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- ช่องกรอกตัวเลข -->
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label for="sigfigInput">Enter a Number</label>
+                        <input type="text" id="sigfigInput" placeholder="e.g., 0.0450 or 1.20e3" class="field-input">
+                    </div>
+
+                    <!-- ช่องกรอกจำนวนหลักที่ต้องการปัด (แสดงเฉพาะโหมด Round) -->
+                    <div id="group-sigfig-n" class="input-group" style="margin-bottom:0; display: none;">
+                        <label for="sigfigN">Round to how many Sig Figs?</label>
+                        <input type="number" id="sigfigN" placeholder="e.g., 3" min="1" step="1" class="field-input">
+                    </div>
+                </div>
+
+                <button class="calc-btn" onclick="calculateSigFigs()" style="margin-top: 25px;">Calculate ✨</button>
+
+                <!-- กล่องแสดงผลลัพธ์ -->
+                <div id="sigfigResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px;">
+                    <div id="sigfigFormulaTitle" style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Result</div>
+                    <div id="sigfigSteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--primary);">Result:</div>
+                    <div id="sigfigResultValue" class="result-value" style="font-size: 28px; text-align: center; margin: 5px 0;">0</div>
+                </div>
+
+                <div id="sigfigErrorBox" class="error-box" aria-live="polite"></div>
+
+                <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
+                <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
+                    <h4 style="margin: 0 0 6px 0; font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 15px;">💡 How it works</h4>
+                    <p style="margin: 0; font-size: 12.5px; color: #495057; line-height: 1.5; font-weight: 500;">
+                        Significant figures show how precisely a measurement was made. Non-zero digits always count, captive zeros (between non-zero digits) always count, leading zeros never count, and trailing zeros only count when a decimal point is present.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- แท็บ 9: Scientific Notation Converter -->
+        <div id="scinot-tab" class="tab-content">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h3>Scientific Notation Converter</h3>
+
+                <!-- เลือกว่าต้องการแปลงรูปแบบ หรือคำนวณตามกฎเลขนัยสำคัญ -->
+                <div class="input-group">
+                    <label for="sciNotMode">What do you want to do?</label>
+                    <select id="sciNotMode" onchange="toggleSciNotInputs()" class="field-select-highlight">
+                        <option value="convert">Convert Number Format</option>
+                        <option value="addsub">Add / Subtract (Sig Fig Rule)</option>
+                        <option value="muldiv">Multiply / Divide (Sig Fig Rule)</option>
+                    </select>
+                </div>
+
+                <hr style="border: 1px dashed var(--accent); margin: 20px 0;">
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- ช่องกรอกตัวเลขเดียว (โหมด Convert) -->
+                    <div id="group-scinot-input" class="input-group" style="margin-bottom:0;">
+                        <label for="scinotInput">Enter a Number</label>
+                        <input type="text" id="scinotInput" placeholder="e.g., 12500 or 1.25e4" class="field-input">
+                    </div>
+
+                    <!-- เลือกดำเนินการ บวก/ลบ (โหมด Add/Subtract) -->
+                    <div id="group-scinot-addsub-op" class="input-group" style="margin-bottom:0; display:none;">
+                        <label>Operation</label>
+                        <div style="display:flex; gap:25px; align-items:center;">
+                            <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="sciAddSubOp" value="add" checked> Add (+)</label>
+                            <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="sciAddSubOp" value="sub"> Subtract (−)</label>
+                        </div>
+                    </div>
+
+                    <!-- เลือกดำเนินการ คูณ/หาร (โหมด Multiply/Divide) -->
+                    <div id="group-scinot-muldiv-op" class="input-group" style="margin-bottom:0; display:none;">
+                        <label>Operation</label>
+                        <div style="display:flex; gap:25px; align-items:center;">
+                            <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="sciMulDivOp" value="mul" checked> Multiply (×)</label>
+                            <label style="display:flex; align-items:center; gap:5px;">
+                                <input type="radio" name="sciMulDivOp" value="div"> Divide (÷)</label>
+                        </div>
+                    </div>
+
+                    <!-- เลขสองตัวสำหรับคำนวณ (ใช้ร่วมกันทั้งโหมด Add/Subtract และ Multiply/Divide) -->
+                    <div id="group-scinot-ab" style="display: none; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="input-group" style="margin-bottom:0;">
+                            <label for="scinotA">Number A</label>
+                            <input type="text" id="scinotA" placeholder="e.g., 12.4" class="field-input">
+                        </div>
+                        <div class="input-group" style="margin-bottom:0;">
+                            <label for="scinotB">Number B</label>
+                            <input type="text" id="scinotB" placeholder="e.g., 3.125" class="field-input">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="calc-btn" onclick="calculateSciNot()" style="margin-top: 25px;">Calculate ✨</button>
+
+                <!-- กล่องแสดงผลลัพธ์ -->
+                <div id="scinotResultBox" class="result-box" aria-live="polite" style="text-align: left; padding: 20px;">
+                    <div id="scinotFormulaTitle" style="font-weight: 700; color: var(--primary-dark); margin-bottom: 5px;">📝 Result</div>
+                    <div id="scinotSteps" style="font-size: 13px; color: #495057; line-height: 1.6; margin-bottom: 12px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;"></div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--primary);">Result:</div>
+                    <div id="scinotResultValue" class="result-value" style="font-size: 28px; text-align: center; margin: 5px 0;">0</div>
+                </div>
+
+                <div id="scinotErrorBox" class="error-box" aria-live="polite"></div>
+
+                <!-- ส่วนอธิบายการทำงานเพิ่มเติม -->
+                <div style="margin-top: 25px; background-color: #f8f9fa; border-radius: 18px; padding: 15px; border: 2px dashed var(--text-muted);">
+                    <h4 style="margin: 0 0 6px 0; font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 15px;">💡 How it works</h4>
+                    <p style="margin: 0; font-size: 12.5px; color: #495057; line-height: 1.5; font-weight: 500;">
+                        <strong>Add/Subtract:</strong> the answer is rounded to match the fewest decimal places among the inputs.<br>
+                        <strong>Multiply/Divide:</strong> the answer is rounded to match the fewest significant figures among the inputs.<br>
+                        (Add/Subtract and Multiply/Divide modes accept plain decimal numbers only, not scientific notation.)
+                    </p>
+                </div>
             </div>
         </div>
 

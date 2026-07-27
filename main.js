@@ -1,3 +1,15 @@
+// --- แปลงอักขระพิเศษ HTML ให้ปลอดภัยก่อนแสดงผล ---
+// ป้องกัน self-XSS จากข้อความที่ผู้ใช้พิมพ์เอง แล้วถูกนำไปแปะใน innerHTML โดยตรง
+// (เช่น ในหน้า Significant Figures / Scientific Notation ที่ echo ค่าที่พิมพ์กลับมาแสดงเป็นขั้นตอน)
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // --- ระบบจัดการเปลี่ยนแท็บหน้าจอ ---
 function switchTab(tabId, element, isHome = false) {
     // 1. ซ่อนเนื้อหาฝั่งขวาทุกตัว
